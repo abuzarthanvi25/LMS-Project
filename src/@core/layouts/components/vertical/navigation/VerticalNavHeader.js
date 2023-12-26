@@ -107,7 +107,7 @@ const VerticalNavHeader = props => {
               </g>
             </svg>
             <HeaderTitle variant='h6' sx={{ ml: 3 }}>
-              LMS
+              Learning Point
             </HeaderTitle>
           </StyledLink>
         </Link>

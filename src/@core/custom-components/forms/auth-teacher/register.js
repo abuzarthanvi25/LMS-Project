@@ -27,14 +27,16 @@ const TeacherRegisterForm = ({
       fullName: '',
       email: '',
       password: '',
-      subjects: [],
+      education: '',
+      subject: '',
       uploadCV: null
     },
     validationSchema: Yup.object({
-      fullName: isRegisterMode ? Yup.string().required('Required') : Yup.string(),
+      fullName: Yup.string().required('Required'),
       email: Yup.string().email('Invalid email address').required('Required'),
       password: Yup.string().required('Required'),
-      subjects: Yup.array().min(1, 'Select at least one subject'),
+      education: Yup.string().required('Education is required'),
+      subject: Yup.string().required('Subject is required'),
       uploadCV: Yup.mixed()
         .required('Upload CV is required')
         .test('fileSize', 'File size is too large (max 5 MB)', value => value && value.size <= 5 * 1024 * 1024)
@@ -74,6 +76,7 @@ const TeacherRegisterForm = ({
           <Grid item xs={12} sm={6}>
             <TextField
               fullWidth
+              name='fullName'
               id='fullName'
               label='Full Name'
               variant='outlined'
@@ -126,32 +129,53 @@ const TeacherRegisterForm = ({
           </Grid>
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
-              <InputLabel htmlFor='subjects'>Subjects</InputLabel>
+              <InputLabel htmlFor='education'>Education</InputLabel>
               <Select
-                id='subjects'
-                name='subjects'
-                multiple
-                value={formik.values.subjects}
+                id='education'
+                name='education'
+                defaultValue=''
+                value={formik.values.education}
                 onChange={formik.handleChange}
-                renderValue={selected => (
-                  <div>
-                    {selected.map(value => (
-                      <Chip key={value} label={value} style={{ margin: '2px' }} />
-                    ))}
-                  </div>
-                )}
+                label='Education'
+                error={formik.touched.education && Boolean(formik.errors.education)}
+              >
+                <MenuItem value=''>Select Education</MenuItem>
+                <MenuItem value='Intermediate/Diploma Holder'>Intermediate/Diploma Holder</MenuItem>
+                <MenuItem value='Bachelors'>Bachelors</MenuItem>
+                <MenuItem value='Masters'>Masters</MenuItem>
+                <MenuItem value='M.phil'>M.phil</MenuItem>
+                <MenuItem value='PHD/Doctrate'>PHD/Doctrate</MenuItem>
+              </Select>
+              {formik.touched.education && formik.errors.education && (
+                <Typography style={{ margin: '3px 14px 0px' }} variant='caption' color='error'>
+                  {formik.errors.education}
+                </Typography>
+              )}
+            </FormControl>
+          </Grid>
+
+          <Grid item xs={12} sm={6}>
+            <FormControl fullWidth>
+              <InputLabel htmlFor='subject'>Subjects</InputLabel>
+              <Select
+                id='subject'
+                name='subject'
+                defaultValue=''
+                value={formik.values.subject}
+                onChange={formik.handleChange}
                 label='Subjects'
-                error={formik.touched.subjects && Boolean(formik.errors.subjects)}
+                error={formik.touched.subject && Boolean(formik.errors.subject)}
               >
                 {/* Replace the items with your actual list of subjects */}
+                <MenuItem value=''>Select Subject</MenuItem>
                 <MenuItem value='Math'>Math</MenuItem>
                 <MenuItem value='Science'>Science</MenuItem>
                 <MenuItem value='English'>English</MenuItem>
                 {/* Add more subjects as needed */}
               </Select>
-              {formik.touched.subjects && formik.errors.subjects && (
+              {formik.touched.subject && formik.errors.subject && (
                 <Typography style={{ margin: '3px 14px 0px' }} variant='caption' color='error'>
-                  {formik.errors.subjects}
+                  {formik.errors.subject}
                 </Typography>
               )}
             </FormControl>
