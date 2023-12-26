@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import themeConfig from 'src/configs/themeConfig'
@@ -10,8 +10,6 @@ import InputAdornment from '@mui/material/InputAdornment'
 import IconButton from '@mui/material/IconButton'
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
-import Checkbox from '@mui/material/Checkbox'
-import FormControlLabel from '@mui/material/FormControlLabel'
 import Button from '@mui/material/Button'
 import { Box, Typography } from '@mui/material'
 
@@ -20,12 +18,13 @@ const StudentLoginForm = ({
   loginTitle = `Welcome to ${themeConfig.templateName}! 👋🏻`,
   loginSubtitle = 'Please sign-in to your account and start the adventure'
 }) => {
+  const [isRegisterMode, setIsRegisterMode] = useState(false)
+
   const formik = useFormik({
     initialValues: {
       fullName: '',
       email: '',
-      password: '',
-      rememberMe: false
+      password: ''
     },
     validationSchema: Yup.object({
       fullName: Yup.string().required('Required'),
@@ -33,7 +32,7 @@ const StudentLoginForm = ({
       password: Yup.string().required('Required')
     }),
     onSubmit: values => {
-      onSubmit(values)
+      onSubmit({ isRegisterMode, data: values })
     }
   })
 
@@ -45,9 +44,13 @@ const StudentLoginForm = ({
     event.preventDefault()
   }
 
+  const handleRegisterClick = () => {
+    setIsRegisterMode(true)
+  }
+
   return (
     <Fragment>
-      <Box sx={{ mb: 6 }}>
+      <Box>
         <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
           {loginTitle}
         </Typography>
@@ -55,22 +58,22 @@ const StudentLoginForm = ({
       </Box>
       <form onSubmit={formik.handleSubmit}>
         <TextField
-          autoFocus
           fullWidth
           id='fullName'
           label='Full Name'
           variant='outlined'
+          size='small' // Added to make the field smaller
           sx={{ marginBottom: 4 }}
           {...formik.getFieldProps('fullName')}
           error={formik.touched.fullName && Boolean(formik.errors.fullName)}
           helperText={formik.touched.fullName && formik.errors.fullName}
         />
         <TextField
-          autoFocus
           fullWidth
           id='email'
           label='Email'
           variant='outlined'
+          size='small' // Added to make the field smaller
           sx={{ marginBottom: 4 }}
           {...formik.getFieldProps('email')}
           error={formik.touched.email && Boolean(formik.errors.email)}
@@ -91,6 +94,7 @@ const StudentLoginForm = ({
             type={formik.values.showPassword ? 'text' : 'password'}
             error={formik.touched.password && Boolean(formik.errors.password)}
             {...formik.getFieldProps('password')}
+            size='small' // Added to make the field smaller
             endAdornment={
               <InputAdornment position='end'>
                 <IconButton
@@ -110,9 +114,17 @@ const StudentLoginForm = ({
             </Typography>
           )}
         </FormControl>
-        <Button fullWidth size='large' variant='contained' sx={{ marginBottom: 7, marginTop: 3 }} type='submit'>
-          Login
+        <Button fullWidth size='large' variant='contained' sx={{ marginBottom: 2, marginTop: 3 }} type='submit'>
+          {isRegisterMode ? 'Register' : 'Login'}
         </Button>
+        <Box sx={{ textAlign: 'center', marginTop: 2 }}>
+          <Typography variant='body2'>
+            {isRegisterMode ? 'Already have an account? ' : "Don't have an account yet? "}
+            <Button color='primary' onClick={isRegisterMode ? () => setIsRegisterMode(false) : handleRegisterClick}>
+              {isRegisterMode ? 'Login now' : 'Register now'}
+            </Button>
+          </Typography>
+        </Box>
       </form>
     </Fragment>
   )

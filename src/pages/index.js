@@ -3,6 +3,7 @@ import { useState } from 'react'
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 import Image from 'next/image'
 import LearningPointLogoSrc from '../../public/images/logos/learning-point.png'
+import UserSelectionModal from '../@core/custom-components/modals/index'
 
 const Home = () => {
   const router = useRouter()
@@ -11,9 +12,12 @@ const Home = () => {
   let [studentRegistration, setStudentRegistration] = useState([])
   let [trainerRegistration, setTrainerRegistration] = useState([])
 
+  const [open, setIsOpen] = useState(false)
+
   return (
     <section className='home'>
       <div className='hero'>
+        <UserSelectionModal isOpen={open} onClose={() => setIsOpen(false)} />
         <div className='leftSide'>
           <Image src={LearningPointLogoSrc} alt='logo' width={300} height={300} />
           <p>
@@ -21,13 +25,7 @@ const Home = () => {
             similique porro dolore laboriosam. Sapiente, consequuntur voluptate! Qui dolore sunt cupiditate quasi earum
             repellendus numquam expedita?
           </p>
-          <button
-            onClick={() => {
-              router.push('/login')
-            }}
-          >
-            Get Started
-          </button>
+          <button onClick={() => setIsOpen(true)}>Get Started</button>
         </div>
         <div className='rightSide1'>
           <div className='image'></div>
