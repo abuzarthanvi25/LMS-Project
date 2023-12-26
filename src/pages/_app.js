@@ -26,7 +26,14 @@ import 'react-perfect-scrollbar/dist/css/styles.css'
 
 // ** Global css styles
 import '../../styles/globals.css'
-import "../../styles/home/Home.scss";
+import '../../styles/home/Home.scss'
+
+// ** Import Store Provider
+import { Provider } from 'react-redux'
+
+// ** Import Store Instance
+import configureStores from '../store/index'
+import Toast from '../@core/custom-components/toasts/index'
 
 const clientSideEmotionCache = createEmotionCache()
 
@@ -47,6 +54,8 @@ if (themeConfig.routingLoader) {
 const App = props => {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props
 
+  const { store } = configureStores()
+
   // Variables
   const getLayout = Component.getLayout ?? (page => <UserLayout>{page}</UserLayout>)
 
@@ -54,20 +63,28 @@ const App = props => {
     <CacheProvider value={emotionCache}>
       <Head>
         <title>{`${themeConfig.templateName}`}</title>
-        <meta
-          name='description'
-          content={`${themeConfig.templateName}`}
-        />
+        <meta name='description' content={`${themeConfig.templateName}`} />
         <meta name='viewport' content='initial-scale=1, width=device-width' />
       </Head>
 
-      <SettingsProvider>
-        <SettingsConsumer>
-          {({ settings }) => {
-            return <ThemeComponent settings={settings}>{getLayout(<Component {...pageProps} />)}</ThemeComponent>
-          }}
-        </SettingsConsumer>
-      </SettingsProvider>
+      <Provider store={store}>
+        <SettingsProvider>
+          <SettingsConsumer>
+            {({ settings }) => {
+              return (
+                <ThemeComponent settings={settings}>
+                  {getLayout(
+                    <>
+                      <Component {...pageProps} />
+                      <Toast />
+                    </>
+                  )}
+                </ThemeComponent>
+              )
+            }}
+          </SettingsConsumer>
+        </SettingsProvider>
+      </Provider>
     </CacheProvider>
   )
 }
