@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from 'react'
 import { useFormik } from 'formik'
-import * as Yup from 'yup'
 import themeConfig from 'src/configs/themeConfig'
 import TextField from '@mui/material/TextField'
 import FormControl from '@mui/material/FormControl'
@@ -12,11 +11,10 @@ import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import Button from '@mui/material/Button'
 import { Box, Typography } from '@mui/material'
-import {
-  studentLoginInitialValues,
-  studentLoginValidationSchema,
-  studentRegisterInitialValues
-} from 'src/@core/utils/validations/student'
+import { studentLoginInitialValues, studentLoginValidationSchema } from 'src/@core/utils/validations/student'
+import { useDispatch, useSelector } from 'react-redux'
+import { loginUserRequest } from '../../../../store/reducers/authReducer'
+import { showFaliureToast, showSuccessToast } from 'src/configs/app-toast'
 
 const StudentLoginForm = ({
   onSubmit,
@@ -25,13 +23,35 @@ const StudentLoginForm = ({
   toggleRegisterMode,
   isRegisterMode
 }) => {
-  // const [isRegisterMode, setIsRegisterMode] = useState(false)
+  const dispatch = useDispatch()
+  const { registrationDetails } = useSelector(state => state.auth)
+  const [loading, setLoading] = useState(false)
 
   const formik = useFormik({
     initialValues: studentLoginInitialValues,
     validationSchema: studentLoginValidationSchema,
     onSubmit: values => {
-      onSubmit({ ...values, role: 'Student' })
+      setLoading(true)
+
+      const payload = {
+        emailAddress: values.email,
+        password: values.password
+      }
+
+      dispatch(loginUserRequest({ body: payload, token: registrationDetails?.token }))
+        .then(res => {
+          console.log(res)
+          if (res.error) {
+            showFaliureToast(res?.payload?.response?.data?.message)
+          } else {
+            showSuccessToast(res?.message)
+          }
+          setLoading(false)
+        })
+        .catch(err => {
+          setLoading(false)
+          console.log(err)
+        })
     }
   })
 
@@ -98,7 +118,14 @@ const StudentLoginForm = ({
             </Typography>
           )}
         </FormControl>
-        <Button fullWidth size='large' variant='contained' sx={{ marginBottom: 2, marginTop: 3 }} type='submit'>
+        <Button
+          disabled={loading}
+          fullWidth
+          size='large'
+          variant='contained'
+          sx={{ marginBottom: 2, marginTop: 3 }}
+          type='submit'
+        >
           {'Login'}
         </Button>
         <Box sx={{ textAlign: 'center', marginTop: 2 }}>

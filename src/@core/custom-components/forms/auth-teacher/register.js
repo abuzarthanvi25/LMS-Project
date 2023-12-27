@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from 'react'
 import { useFormik } from 'formik'
-import * as Yup from 'yup'
 import themeConfig from 'src/configs/themeConfig'
 import TextField from '@mui/material/TextField'
 import FormControl from '@mui/material/FormControl'
@@ -14,27 +13,59 @@ import Button from '@mui/material/Button'
 import { Box, Typography, Grid, MenuItem, Select, Chip } from '@mui/material'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { teacherRegisterInitialValues, teacherRegisterValidationSchema } from 'src/@core/utils/validations/teacher'
+import { useDispatch } from 'react-redux'
+import { registerUserRequest } from 'src/store/reducers/authReducer'
+import { showFaliureToast, showSuccessToast } from 'src/configs/app-toast'
 
 const TeacherRegisterForm = ({
-  onSubmit,
   loginTitle = `Welcome to ${themeConfig.templateName}! 👋🏻`,
   loginSubtitle = 'Create a teacher account and start the adventure',
   handleTeacherRegistration
 }) => {
+  const dispatch = useDispatch()
+  const [loading, setLoading] = useState(false)
+
   const formik = useFormik({
     initialValues: teacherRegisterInitialValues,
     validationSchema: teacherRegisterValidationSchema,
     onSubmit: values => {
       const formData = new FormData()
-      formData.append('fullName', values.fullName)
-      formData.append('emailAddress', values.email)
-      formData.append('password', values.password)
-      formData.append('education', values.education)
-      formData.append('subject', values.subject)
-      formData.append('cvImage', values.uploadCV)
-      formData.append('role', values.role)
 
-      onSubmit(formData)
+      const file = values.uploadCV
+
+      if (file) {
+        const reader = new FileReader()
+
+        reader.onloadend = () => {
+          // The result attribute contains the base64 string
+          const base64String = reader.result
+          formData.append('cvImage', base64String)
+          formData.append('fullName', values.fullName)
+          formData.append('emailAddress', values.email)
+          formData.append('password', values.password)
+          formData.append('education', values.education)
+          formData.append('subject', values.subject)
+          formData.append('role', 'Teacher')
+
+          setLoading(true)
+
+          dispatch(registerUserRequest({ body: formData }))
+            .then(res => {
+              if (res.error) {
+                showFaliureToast(res?.payload?.response?.data?.message)
+              } else {
+                showSuccessToast(res?.message)
+              }
+              setLoading(false)
+            })
+            .catch(err => {
+              setLoading(false)
+              console.log(err)
+            })
+        }
+      }
+
+      reader.readAsDataURL(file)
     }
   })
 
@@ -190,7 +221,14 @@ const TeacherRegisterForm = ({
             )}
           </Grid>
           <Grid item xs={12}>
-            <Button fullWidth size='large' variant='contained' sx={{ marginBottom: 2, marginTop: 3 }} type='submit'>
+            <Button
+              disabled={loading}
+              fullWidth
+              size='large'
+              variant='contained'
+              sx={{ marginBottom: 2, marginTop: 3 }}
+              type='submit'
+            >
               Register as Teacher
             </Button>
           </Grid>

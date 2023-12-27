@@ -16,6 +16,9 @@ import { Box, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import Link from 'next/link'
 import { studentRegisterInitialValues, studentRegisterValidationSchema } from 'src/@core/utils/validations/student'
+import { useDispatch, useSelector } from 'react-redux'
+import { registerUserRequest } from '../../../../store/reducers/authReducer'
+import { showFaliureToast, showSuccessToast } from 'src/configs/app-toast'
 
 const LinkStyled = styled('a')(({ theme }) => ({
   fontSize: '0.875rem',
@@ -24,21 +27,40 @@ const LinkStyled = styled('a')(({ theme }) => ({
 }))
 
 const StudentRegisterForm = ({
-  onSubmit,
   RegisterTitle = `Adventure starts here �`,
   RegisterSubtitle = 'Make your learning easy and fun!',
   toggleRegisterMode,
   isRegisterMode
 }) => {
+  const dispatch = useDispatch()
+  const [loading, setLoading] = useState(false)
+
   const formik = useFormik({
     initialValues: studentRegisterInitialValues,
     validationSchema: studentRegisterValidationSchema,
     onSubmit: values => {
       const formData = new FormData()
+
       formData.append('fullName', values.fullName)
       formData.append('emailAddress', values.email)
-      formData.append('pasword', values.password)
-      onSubmit(formData)
+      formData.append('password', values.password)
+      formData.append('role', 'Student')
+
+      setLoading(true)
+
+      dispatch(registerUserRequest({ body: formData }))
+        .then(res => {
+          if (res.error) {
+            showFaliureToast(res?.payload?.response?.data?.message)
+          } else {
+            showSuccessToast(res?.message)
+          }
+          setLoading(false)
+        })
+        .catch(err => {
+          setLoading(false)
+          console.log(err)
+        })
     }
   })
 
@@ -131,7 +153,7 @@ const StudentRegisterForm = ({
           }
         />
         <Button
-          disabled={!isPolicyAccepted}
+          disabled={!isPolicyAccepted || loading}
           fullWidth
           size='large'
           variant='contained'

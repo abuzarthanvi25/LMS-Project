@@ -1,9 +1,19 @@
 import ApiResource from '../../services/api'
 import ApiConstants from '../../configs/constants'
 
+const requestHeaders = token => {
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }
+
+  return config
+}
+
 async function login(payload, thunkAPI) {
   try {
-    const response = await ApiResource.post(ApiConstants.login, payload)
+    const response = await ApiResource.post(ApiConstants.login, payload?.body, requestHeaders(payload?.token))
 
     return response
   } catch (error) {
@@ -13,7 +23,7 @@ async function login(payload, thunkAPI) {
 
 async function register(payload, thunkAPI) {
   try {
-    const response = await ApiResource.post(ApiConstants.signUp, payload)
+    const response = await ApiResource.post(ApiConstants.signUp, payload?.body)
 
     return response
   } catch (error) {

@@ -87,22 +87,38 @@ const UserSelectionModal = ({ isOpen, onClose }) => {
   }
 
   return (
-    <Modal open={isOpen} onClose={onClose}>
-      <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+    <Modal className={'selectionModal'} open={isOpen} onClose={onClose}>
+      <div
+        className='innerWrap'
+        style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          maxWidth: '700px',
+          width: '100%'
+        }}
+      >
         <Card>
           <CardContent>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <Typography variant='h5' gutterBottom>
                 Select User Type
               </Typography>
-              <Button onClick={onClose} variant='contained' color='primary'>
-                Close
+              <Button className='crossBtn' onClick={onClose} variant='contained' color='primary'>
+                x
               </Button>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-around', margin: '20px 0px' }}>
-              <Card onClick={() => handleCardSelect('Student')} style={{ cursor: 'pointer', width: '150px' }}>
-                <CardContent>
-                  <Typography variant='h6'>Student</Typography>
+              <Card
+                className={selectedCard == 'Student' ? 'active' : 'inactive'}
+                onClick={() => handleCardSelect('Student')}
+                style={{ cursor: 'pointer', width: '150px' }}
+              >
+                <CardContent style={{ textAlign: 'center' }}>
+                  <Typography style={{ marginBottom: '15px' }} variant='h6'>
+                    Student
+                  </Typography>
                   <img
                     src='https://cdn2.iconfinder.com/data/icons/learning-6/64/Student-Graduate-256.png'
                     alt='Student'
@@ -110,9 +126,15 @@ const UserSelectionModal = ({ isOpen, onClose }) => {
                   />
                 </CardContent>
               </Card>
-              <Card onClick={() => handleCardSelect('Teacher')} style={{ cursor: 'pointer', width: '150px' }}>
-                <CardContent>
-                  <Typography variant='h6'>Teacher</Typography>
+              <Card
+                className={selectedCard == 'Teacher' ? 'active' : 'inactive'}
+                onClick={() => handleCardSelect('Teacher')}
+                style={{ cursor: 'pointer', width: '150px' }}
+              >
+                <CardContent style={{ textAlign: 'center' }}>
+                  <Typography style={{ marginBottom: '15px' }} variant='h6'>
+                    Teacher
+                  </Typography>
                   <img
                     src='https://cdn1.iconfinder.com/data/icons/education-outline-16/60/023_-_Teaching-256.png'
                     alt='Teacher'
@@ -120,9 +142,15 @@ const UserSelectionModal = ({ isOpen, onClose }) => {
                   />
                 </CardContent>
               </Card>
-              <Card onClick={() => handleCardSelect('Admin')} style={{ cursor: 'pointer', width: '150px' }}>
-                <CardContent>
-                  <Typography variant='h6'>Admin</Typography>
+              <Card
+                className={selectedCard == 'Admin' ? 'active' : 'inactive'}
+                onClick={() => handleCardSelect('Admin')}
+                style={{ cursor: 'pointer', width: '150px' }}
+              >
+                <CardContent style={{ textAlign: 'center' }}>
+                  <Typography style={{ marginBottom: '15px' }} variant='h6'>
+                    Admin
+                  </Typography>
                   <img
                     src='https://cdn2.iconfinder.com/data/icons/essential-web-2/50/user-add-plus-create-admin-256.png'
                     alt='Admin'

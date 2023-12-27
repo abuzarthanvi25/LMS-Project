@@ -13,6 +13,9 @@ import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import Button from '@mui/material/Button'
 import { Box, Typography } from '@mui/material'
 import { teacherLoginInitialValues, teacherLoginValidationSchema } from 'src/@core/utils/validations/teacher'
+import { useDispatch, useSelector } from 'react-redux'
+import { loginUserRequest } from 'src/store/reducers/authReducer'
+import { showFaliureToast, showSuccessToast } from 'src/configs/app-toast'
 
 const TeacherLoginForm = ({
   onSubmit,
@@ -20,13 +23,37 @@ const TeacherLoginForm = ({
   loginSubtitle = 'Please sign-in to your account and start the adventure',
   handleTeacherRegistration
 }) => {
+  const dispatch = useDispatch()
+
   const [isRegisterMode, setIsRegisterMode] = useState(false)
+  const { registrationDetails } = useSelector(state => state.auth)
+  const [loading, setLoading] = useState(false)
 
   const formik = useFormik({
     initialValues: teacherLoginInitialValues,
     validationSchema: teacherLoginValidationSchema,
     onSubmit: values => {
-      onSubmit({ ...values, role: 'Teacher' })
+      setLoading(true)
+
+      const payload = {
+        emailAddress: values.email,
+        password: values.password
+      }
+
+      dispatch(loginUserRequest({ body: payload, token: registrationDetails?.token }))
+        .then(res => {
+          console.log(res)
+          if (res.error) {
+            showFaliureToast(res?.payload?.response?.data?.message)
+          } else {
+            showSuccessToast(res?.message)
+          }
+          setLoading(false)
+        })
+        .catch(err => {
+          setLoading(false)
+          console.log(err)
+        })
     }
   })
 
@@ -97,7 +124,14 @@ const TeacherLoginForm = ({
             </Typography>
           )}
         </FormControl>
-        <Button fullWidth size='large' variant='contained' sx={{ marginBottom: 2, marginTop: 3 }} type='submit'>
+        <Button
+          disabled={loading}
+          fullWidth
+          size='large'
+          variant='contained'
+          sx={{ marginBottom: 2, marginTop: 3 }}
+          type='submit'
+        >
           {'Login'}
         </Button>
         <Box sx={{ textAlign: 'center', marginTop: 2 }}>
