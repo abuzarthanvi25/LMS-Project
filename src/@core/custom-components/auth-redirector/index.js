@@ -7,13 +7,13 @@ export default function AuthProvider({ children }) {
 
   const { userDetials } = useSelector(state => state.auth)
 
-  useEffect(() => {
-    if (!userDetials) {
-      router.push('/')
-    } else {
-      router.push('/')
-    }
-  }, [userDetials])
+  // useEffect(() => {
+  //   if (!userDetials) {
+  //     router.push('/')
+  //   } else {
+  //     router.push('/')
+  //   }
+  // }, [userDetials])
 
   return <>{children}</>
 }

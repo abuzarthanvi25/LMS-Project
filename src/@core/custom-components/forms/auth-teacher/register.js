@@ -37,10 +37,16 @@ const TeacherRegisterForm = ({
         const reader = new FileReader()
 
         reader.onloadend = () => {
-          // The result attribute contains the base64 string
-          const base64String = reader.result
-          formData.append('cvImage', base64String)
+          // The result attribute contains the ArrayBuffer
+          const fileBuffer = reader.result
+
+          const fileBlob = new Blob([fileBuffer])
+          const fileName = file.name
+
+          // Append the file with its details to the FormData
+          // formData.append('cvImage', '')
           formData.append('fullName', values.fullName)
+          formData.append('bankAccount', values.bankAccount)
           formData.append('emailAddress', values.email)
           formData.append('password', values.password)
           formData.append('education', values.education)
@@ -55,7 +61,7 @@ const TeacherRegisterForm = ({
                 showFaliureToast(res?.payload?.response?.data?.message)
               } else {
                 showSuccessToast(res?.message)
-                toggleRegisterMode()
+                handleTeacherRegistration()
               }
               setLoading(false)
             })
@@ -64,9 +70,9 @@ const TeacherRegisterForm = ({
               console.log(err)
             })
         }
-      }
 
-      reader.readAsDataURL(file)
+        reader.readAsArrayBuffer(file)
+      }
     }
   })
 
@@ -196,6 +202,18 @@ const TeacherRegisterForm = ({
                 </Typography>
               )}
             </FormControl>
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <TextField
+              fullWidth
+              id='bankAccount'
+              label='bankAccount'
+              variant='outlined'
+              size='small'
+              {...formik.getFieldProps('bankAccount')}
+              error={formik.touched.bankAccount && Boolean(formik.errors.bankAccount)}
+              helperText={formik.touched.bankAccount && formik.errors.bankAccount}
+            />
           </Grid>
           <Grid item xs={12}>
             <input

@@ -43,7 +43,6 @@ const StudentLoginForm = ({
 
       dispatch(loginUserRequest({ body: payload, token: registrationDetails?.token }))
         .then(res => {
-          console.log(res)
           if (res.error) {
             showFaliureToast(res?.payload?.response?.data?.message)
           } else {

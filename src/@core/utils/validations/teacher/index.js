@@ -16,7 +16,8 @@ export const teacherRegisterInitialValues = {
   password: '',
   education: '',
   subject: '',
-  uploadCV: null
+  uploadCV: null,
+  bankAccount: ''
 }
 
 export const teacherRegisterValidationSchema = Yup.object({
