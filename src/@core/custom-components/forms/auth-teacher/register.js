@@ -13,6 +13,7 @@ import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import Button from '@mui/material/Button'
 import { Box, Typography, Grid, MenuItem, Select, Chip } from '@mui/material'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
+import { teacherRegisterInitialValues, teacherRegisterValidationSchema } from 'src/@core/utils/validations/teacher'
 
 const TeacherRegisterForm = ({
   onSubmit,
@@ -20,34 +21,20 @@ const TeacherRegisterForm = ({
   loginSubtitle = 'Create a teacher account and start the adventure',
   handleTeacherRegistration
 }) => {
-  const [isRegisterMode, setIsRegisterMode] = useState(false)
-
   const formik = useFormik({
-    initialValues: {
-      fullName: '',
-      email: '',
-      password: '',
-      education: '',
-      subject: '',
-      uploadCV: null
-    },
-    validationSchema: Yup.object({
-      fullName: Yup.string().required('Required'),
-      email: Yup.string().email('Invalid email address').required('Required'),
-      password: Yup.string().required('Required'),
-      education: Yup.string().required('Education is required'),
-      subject: Yup.string().required('Subject is required'),
-      uploadCV: Yup.mixed()
-        .required('Upload CV is required')
-        .test('fileSize', 'File size is too large (max 5 MB)', value => value && value.size <= 5 * 1024 * 1024)
-    }),
+    initialValues: teacherRegisterInitialValues,
+    validationSchema: teacherRegisterValidationSchema,
     onSubmit: values => {
       const formData = new FormData()
-      formData.append('uploadCV', values.uploadCV)
+      formData.append('fullName', values.fullName)
+      formData.append('emailAddress', values.email)
+      formData.append('password', values.password)
+      formData.append('education', values.education)
+      formData.append('subject', values.subject)
+      formData.append('cvImage', values.uploadCV)
+      formData.append('role', values.role)
 
-      console.log(formData.get('uploadCV'))
-
-      onSubmit({ isRegisterMode, data: { ...values, uploadCV: formData } })
+      onSubmit(formData)
     }
   })
 
@@ -57,10 +44,6 @@ const TeacherRegisterForm = ({
 
   const handleMouseDownPassword = event => {
     event.preventDefault()
-  }
-
-  const handleRegisterClick = () => {
-    setIsRegisterMode(true)
   }
 
   return (
@@ -133,6 +116,7 @@ const TeacherRegisterForm = ({
               <Select
                 id='education'
                 name='education'
+                size='small'
                 defaultValue=''
                 value={formik.values.education}
                 onChange={formik.handleChange}
@@ -160,6 +144,7 @@ const TeacherRegisterForm = ({
               <Select
                 id='subject'
                 name='subject'
+                size='small'
                 defaultValue=''
                 value={formik.values.subject}
                 onChange={formik.handleChange}

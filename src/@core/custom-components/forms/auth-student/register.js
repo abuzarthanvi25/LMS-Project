@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import TextField from '@mui/material/TextField'
@@ -15,6 +15,7 @@ import Button from '@mui/material/Button'
 import { Box, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import Link from 'next/link'
+import { studentRegisterInitialValues, studentRegisterValidationSchema } from 'src/@core/utils/validations/student'
 
 const LinkStyled = styled('a')(({ theme }) => ({
   fontSize: '0.875rem',
@@ -24,24 +25,24 @@ const LinkStyled = styled('a')(({ theme }) => ({
 
 const StudentRegisterForm = ({
   onSubmit,
-  RegisterTitle = `Adventure starts here 🚀`,
-  RegisterSubtitle = 'Make your learning easy and fun!'
+  RegisterTitle = `Adventure starts here �`,
+  RegisterSubtitle = 'Make your learning easy and fun!',
+  toggleRegisterMode,
+  isRegisterMode
 }) => {
   const formik = useFormik({
-    initialValues: {
-      fullName: '',
-      email: '',
-      password: ''
-    },
-    validationSchema: Yup.object({
-      fullName: Yup.string().required('Required'),
-      email: Yup.string().email('Invalid email address').required('Required'),
-      password: Yup.string().required('Required')
-    }),
+    initialValues: studentRegisterInitialValues,
+    validationSchema: studentRegisterValidationSchema,
     onSubmit: values => {
-      onSubmit(values)
+      const formData = new FormData()
+      formData.append('fullName', values.fullName)
+      formData.append('emailAddress', values.email)
+      formData.append('pasword', values.password)
+      onSubmit(formData)
     }
   })
+
+  const [isPolicyAccepted, setIsPolicyAccepted] = useState(false)
 
   const handleClickShowPassword = () => {
     formik.setValues({ ...formik.values, showPassword: !formik.values.showPassword })
@@ -61,9 +62,9 @@ const StudentRegisterForm = ({
       </Box>
       <form onSubmit={formik.handleSubmit}>
         <TextField
-          autoFocus
           fullWidth
           id='fullName'
+          size='small'
           label='Full Name'
           variant='outlined'
           sx={{ marginBottom: 4 }}
@@ -72,9 +73,9 @@ const StudentRegisterForm = ({
           helperText={formik.touched.fullName && formik.errors.fullName}
         />
         <TextField
-          autoFocus
           fullWidth
           id='email'
+          size='small'
           label='Email'
           variant='outlined'
           sx={{ marginBottom: 4 }}
@@ -94,6 +95,7 @@ const StudentRegisterForm = ({
           <OutlinedInput
             label='Password'
             id='auth-login-password'
+            size='small'
             type={formik.values.showPassword ? 'text' : 'password'}
             error={formik.touched.password && Boolean(formik.errors.password)}
             {...formik.getFieldProps('password')}
@@ -118,6 +120,7 @@ const StudentRegisterForm = ({
         </FormControl>
         <FormControlLabel
           control={<Checkbox />}
+          onChange={e => setIsPolicyAccepted(e.target.checked)}
           label={
             <Fragment>
               <span>I agree to </span>
@@ -127,9 +130,24 @@ const StudentRegisterForm = ({
             </Fragment>
           }
         />
-        <Button fullWidth size='large' variant='contained' sx={{ marginBottom: 7, marginTop: 3 }} type='submit'>
+        <Button
+          disabled={!isPolicyAccepted}
+          fullWidth
+          size='large'
+          variant='contained'
+          sx={{ marginBottom: 7, marginTop: 3 }}
+          type='submit'
+        >
           Register
         </Button>
+        <Box sx={{ textAlign: 'center', marginTop: 2 }}>
+          <Typography variant='body2'>
+            {isRegisterMode ? 'Already have an account? ' : "Don't have an account yet? "}
+            <Button color='primary' onClick={toggleRegisterMode}>
+              {isRegisterMode ? 'Login now' : 'Register now'}
+            </Button>
+          </Typography>
+        </Box>
       </form>
     </Fragment>
   )

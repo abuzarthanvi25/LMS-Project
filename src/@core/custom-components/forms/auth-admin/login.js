@@ -12,6 +12,7 @@ import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import Button from '@mui/material/Button'
 import { Box, Typography } from '@mui/material'
+import { adminLoginInitialValues, adminLoginValidationSchema } from 'src/@core/utils/validations/teacher'
 
 const AdminLoginForm = ({
   onSubmit,
@@ -19,16 +20,10 @@ const AdminLoginForm = ({
   loginSubtitle = 'Please sign-in to your admin account'
 }) => {
   const formik = useFormik({
-    initialValues: {
-      email: '',
-      password: ''
-    },
-    validationSchema: Yup.object({
-      email: Yup.string().email('Invalid email address').required('Required'),
-      password: Yup.string().required('Required')
-    }),
+    initialValues: adminLoginInitialValues,
+    validationSchema: adminLoginValidationSchema,
     onSubmit: values => {
-      onSubmit(values)
+      onSubmit({ ...values, role: 'Admin' })
     }
   })
 

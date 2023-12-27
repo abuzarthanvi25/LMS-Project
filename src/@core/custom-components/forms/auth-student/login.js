@@ -12,27 +12,26 @@ import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import Button from '@mui/material/Button'
 import { Box, Typography } from '@mui/material'
+import {
+  studentLoginInitialValues,
+  studentLoginValidationSchema,
+  studentRegisterInitialValues
+} from 'src/@core/utils/validations/student'
 
 const StudentLoginForm = ({
   onSubmit,
   loginTitle = `Welcome to ${themeConfig.templateName}! 👋🏻`,
-  loginSubtitle = 'Please sign-in to your account and start the adventure'
+  loginSubtitle = 'Please sign-in to your account and start the adventure',
+  toggleRegisterMode,
+  isRegisterMode
 }) => {
-  const [isRegisterMode, setIsRegisterMode] = useState(false)
+  // const [isRegisterMode, setIsRegisterMode] = useState(false)
 
   const formik = useFormik({
-    initialValues: {
-      fullName: '',
-      email: '',
-      password: ''
-    },
-    validationSchema: Yup.object({
-      fullName: Yup.string().required('Required'),
-      email: Yup.string().email('Invalid email address').required('Required'),
-      password: Yup.string().required('Required')
-    }),
+    initialValues: studentLoginInitialValues,
+    validationSchema: studentLoginValidationSchema,
     onSubmit: values => {
-      onSubmit({ isRegisterMode, data: values })
+      onSubmit({ ...values, role: 'Student' })
     }
   })
 
@@ -44,10 +43,6 @@ const StudentLoginForm = ({
     event.preventDefault()
   }
 
-  const handleRegisterClick = () => {
-    setIsRegisterMode(true)
-  }
-
   return (
     <Fragment>
       <Box>
@@ -57,17 +52,6 @@ const StudentLoginForm = ({
         <Typography variant='body2'>{loginSubtitle}</Typography>
       </Box>
       <form onSubmit={formik.handleSubmit}>
-        <TextField
-          fullWidth
-          id='fullName'
-          label='Full Name'
-          variant='outlined'
-          size='small' // Added to make the field smaller
-          sx={{ marginBottom: 4 }}
-          {...formik.getFieldProps('fullName')}
-          error={formik.touched.fullName && Boolean(formik.errors.fullName)}
-          helperText={formik.touched.fullName && formik.errors.fullName}
-        />
         <TextField
           fullWidth
           id='email'
@@ -115,12 +99,12 @@ const StudentLoginForm = ({
           )}
         </FormControl>
         <Button fullWidth size='large' variant='contained' sx={{ marginBottom: 2, marginTop: 3 }} type='submit'>
-          {isRegisterMode ? 'Register' : 'Login'}
+          {'Login'}
         </Button>
         <Box sx={{ textAlign: 'center', marginTop: 2 }}>
           <Typography variant='body2'>
             {isRegisterMode ? 'Already have an account? ' : "Don't have an account yet? "}
-            <Button color='primary' onClick={isRegisterMode ? () => setIsRegisterMode(false) : handleRegisterClick}>
+            <Button color='primary' onClick={toggleRegisterMode}>
               {isRegisterMode ? 'Login now' : 'Register now'}
             </Button>
           </Typography>

@@ -4,15 +4,25 @@ import StudentLoginForm from '../forms/auth-student/login'
 import TeacherLoginForm from '../forms/auth-teacher/login'
 import AdminLoginForm from '../forms/auth-admin/login'
 import TeacherRegisterForm from '../forms/auth-teacher/register'
+import StudentRegisterForm from '../forms/auth-student/register'
 
 const UserSelectionModal = ({ isOpen, onClose }) => {
   const [selectedCard, setSelectedCard] = useState(null)
   const [isTeacherRegistration, setIsTeacherRegistration] = useState(false)
+  const [isRegisterMode, setIsRegisterMode] = useState(false)
 
   const handleTeacherRegistration = () => setIsTeacherRegistration(!isTeacherRegistration)
 
   const handleCardSelect = cardType => {
     setSelectedCard(cardType)
+  }
+
+  const handleLogin = payload => {
+    console.log(payload)
+  }
+
+  const handleRegister = payload => {
+    console.log(payload)
   }
 
   const renderCardContent = () => {
@@ -22,7 +32,23 @@ const UserSelectionModal = ({ isOpen, onClose }) => {
         return (
           <div>
             <Typography style={{ textAlign: 'center' }}>Student Form Here</Typography>
-            <StudentLoginForm onSubmit={values => console.log(values)} loginSubtitle='' loginTitle='Student Login' />
+            {isRegisterMode ? (
+              <StudentRegisterForm
+                onSubmit={values => handleRegister(values)}
+                RegisterSubtitle=''
+                RegisterTitle='Student Registration'
+                toggleRegisterMode={() => setIsRegisterMode(!isRegisterMode)}
+                isRegisterMode={isRegisterMode}
+              />
+            ) : (
+              <StudentLoginForm
+                onSubmit={values => handleLogin(values)}
+                loginSubtitle=''
+                loginTitle='Student Login'
+                toggleRegisterMode={() => setIsRegisterMode(!isRegisterMode)}
+                isRegisterMode={isRegisterMode}
+              />
+            )}
           </div>
         )
       case 'Teacher':

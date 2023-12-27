@@ -12,6 +12,7 @@ import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import Button from '@mui/material/Button'
 import { Box, Typography } from '@mui/material'
+import { teacherLoginInitialValues, teacherLoginValidationSchema } from 'src/@core/utils/validations/teacher'
 
 const TeacherLoginForm = ({
   onSubmit,
@@ -22,18 +23,10 @@ const TeacherLoginForm = ({
   const [isRegisterMode, setIsRegisterMode] = useState(false)
 
   const formik = useFormik({
-    initialValues: {
-      fullName: '',
-      email: '',
-      password: ''
-    },
-    validationSchema: Yup.object({
-      fullName: isRegisterMode ? Yup.string().required('Required') : Yup.string(),
-      email: Yup.string().email('Invalid email address').required('Required'),
-      password: Yup.string().required('Required')
-    }),
+    initialValues: teacherLoginInitialValues,
+    validationSchema: teacherLoginValidationSchema,
     onSubmit: values => {
-      onSubmit({ isRegisterMode, data: values })
+      onSubmit({ ...values, role: 'Teacher' })
     }
   })
 
@@ -58,17 +51,6 @@ const TeacherLoginForm = ({
         <Typography variant='body2'>{loginSubtitle}</Typography>
       </Box>
       <form onSubmit={formik.handleSubmit}>
-        <TextField
-          fullWidth
-          id='fullName'
-          label='Full Name'
-          variant='outlined'
-          size='small' // Added to make the field smaller
-          sx={{ marginBottom: 4 }}
-          {...formik.getFieldProps('fullName')}
-          error={formik.touched.fullName && Boolean(formik.errors.fullName)}
-          helperText={formik.touched.fullName && formik.errors.fullName}
-        />
         <TextField
           fullWidth
           id='email'
