@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { useState } from 'react'
 import BlankLayout from 'src/@core/layouts/BlankLayout'
 import Image from 'next/image'
-import LearningPointLogoSrc from '../../public/images/logos/learning-point.png'
+import LearningPointLogoSrc from '../../public/images/logos/updated-logo2.png'
 import UserSelectionModal from '../@core/custom-components/modals/index'
 
 const Home = () => {

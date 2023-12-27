@@ -23,8 +23,8 @@ import { handleURLQueries } from 'src/@core/layouts/utils'
 // ** Styled Components
 const MenuNavLink = styled(ListItemButton)(({ theme }) => ({
   width: '100%',
-  borderTopRightRadius: 100,
-  borderBottomRightRadius: 100,
+  borderTopRightRadius: 5,
+  borderBottomRightRadius: 5,
   color: theme.palette.text.primary,
   padding: theme.spacing(2.25, 3.5),
   transition: 'opacity .25s ease-in-out',
