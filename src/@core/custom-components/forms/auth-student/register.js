@@ -54,6 +54,7 @@ const StudentRegisterForm = ({
             showFaliureToast(res?.payload?.response?.data?.message)
           } else {
             showSuccessToast(res?.message)
+            toggleRegisterMode()
           }
           setLoading(false)
         })

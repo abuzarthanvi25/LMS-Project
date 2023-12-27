@@ -16,6 +16,7 @@ import { adminLoginInitialValues, adminLoginValidationSchema } from 'src/@core/u
 import { useDispatch, useSelector } from 'react-redux'
 import { showFaliureToast, showSuccessToast } from 'src/configs/app-toast'
 import { loginUserRequest } from 'src/store/reducers/authReducer'
+import { useRouter } from 'next/router'
 
 const AdminLoginForm = ({
   loginTitle = `Welcome to ${themeConfig.templateName}! 👋🏻`,
@@ -24,6 +25,7 @@ const AdminLoginForm = ({
   const dispatch = useDispatch()
   const { registrationDetails } = useSelector(state => state.auth)
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
   const formik = useFormik({
     initialValues: adminLoginInitialValues,
@@ -42,6 +44,7 @@ const AdminLoginForm = ({
           if (res.error) {
             showFaliureToast(res?.payload?.response?.data?.message)
           } else {
+            router.push('/dashboard')
             showSuccessToast(res?.message)
           }
           setLoading(false)

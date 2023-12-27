@@ -34,6 +34,7 @@ import { Provider } from 'react-redux'
 // ** Import Store Instance
 import configureStores from '../store/index'
 import Toast from '../@core/custom-components/toasts/index'
+import AuthRedirector from 'src/@core/custom-components/auth-redirector'
 
 const clientSideEmotionCache = createEmotionCache()
 
@@ -75,8 +76,10 @@ const App = props => {
                 <ThemeComponent settings={settings}>
                   {getLayout(
                     <>
-                      <Component {...pageProps} />
-                      <Toast />
+                      <AuthRedirector>
+                        <Component {...pageProps} />
+                        <Toast />
+                      </AuthRedirector>
                     </>
                   )}
                 </ThemeComponent>

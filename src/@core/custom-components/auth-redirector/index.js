@@ -1,60 +1,19 @@
+import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
-import { connect } from 'react-redux'
-import FullPageLoader from '../loaders'
+import { useSelector } from 'react-redux'
 
-const AuthRedirector = ({ children, auth, rehydrated }) => {
-  const [isShow, setIsShow] = useState(false)
-  const [isRehydrated, setIsRehydrated] = useState(false)
-  const [routeChanged, setRouteChanged] = useState(false)
+export default function AuthProvider({ children }) {
   const router = useRouter()
 
-  useEffect(() => {
-    setIsRehydrated(rehydrated)
-  }, [rehydrated])
+  const { userDetials } = useSelector(state => state.auth)
 
   useEffect(() => {
-    authCheck()
-
-    const hideContent = () => {
-      setIsShow(true)
-    }
-
-    const showContent = () => {
-      setIsShow(false)
-    }
-    router.events.on('routeChangeStart', hideContent)
-    router.events.on('routeChangeComplete', showContent)
-
-    return () => {
-      router.events.off('routeChangeStart', hideContent)
-    }
-  }, [])
-
-  useEffect(() => {
-    authCheck()
-  }, [router.pathname])
-
-  const authCheck = () => {
-    if (auth?.userDetails) {
-      setRouteChanged(false)
+    if (!userDetials) {
+      router.push('/')
     } else {
-      setRouteChanged(true)
-      router.push('/login')
+      router.push('/')
     }
-  }
-  if (isShow || routeChanged || !isRehydrated) {
-    return <FullPageLoader isLoading={true} />
-  }
+  }, [userDetials])
 
-  return children
+  return <>{children}</>
 }
-
-const mapStateToProps = state => {
-  return {
-    auth: state.auth,
-    rehydrated: state._persist.rehydrated
-  }
-}
-
-export default connect(mapStateToProps, null)(AuthRedirector)

@@ -15,6 +15,7 @@ import { studentLoginInitialValues, studentLoginValidationSchema } from 'src/@co
 import { useDispatch, useSelector } from 'react-redux'
 import { loginUserRequest } from '../../../../store/reducers/authReducer'
 import { showFaliureToast, showSuccessToast } from 'src/configs/app-toast'
+import { useRouter } from 'next/router'
 
 const StudentLoginForm = ({
   onSubmit,
@@ -26,6 +27,8 @@ const StudentLoginForm = ({
   const dispatch = useDispatch()
   const { registrationDetails } = useSelector(state => state.auth)
   const [loading, setLoading] = useState(false)
+
+  const router = useRouter()
 
   const formik = useFormik({
     initialValues: studentLoginInitialValues,
@@ -44,6 +47,7 @@ const StudentLoginForm = ({
           if (res.error) {
             showFaliureToast(res?.payload?.response?.data?.message)
           } else {
+            router.push('/dashboard')
             showSuccessToast(res?.message)
           }
           setLoading(false)
