@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React, { Fragment, useState } from 'react'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import themeConfig from 'src/configs/themeConfig'
@@ -13,17 +13,43 @@ import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import Button from '@mui/material/Button'
 import { Box, Typography } from '@mui/material'
 import { adminLoginInitialValues, adminLoginValidationSchema } from 'src/@core/utils/validations/teacher'
+import { useDispatch, useSelector } from 'react-redux'
+import { showFaliureToast, showSuccessToast } from 'src/configs/app-toast'
+import { loginUserRequest } from 'src/store/reducers/authReducer'
 
 const AdminLoginForm = ({
-  onSubmit,
   loginTitle = `Welcome to ${themeConfig.templateName}! 👋🏻`,
   loginSubtitle = 'Please sign-in to your admin account'
 }) => {
+  const dispatch = useDispatch()
+  const { registrationDetails } = useSelector(state => state.auth)
+  const [loading, setLoading] = useState(false)
+
   const formik = useFormik({
     initialValues: adminLoginInitialValues,
     validationSchema: adminLoginValidationSchema,
     onSubmit: values => {
-      onSubmit({ ...values, role: 'Admin' })
+      setLoading(true)
+
+      const payload = {
+        emailAddress: values.email,
+        password: values.password
+      }
+
+      dispatch(loginUserRequest({ body: payload, token: registrationDetails?.token }))
+        .then(res => {
+          console.log(res)
+          if (res.error) {
+            showFaliureToast(res?.payload?.response?.data?.message)
+          } else {
+            showSuccessToast(res?.message)
+          }
+          setLoading(false)
+        })
+        .catch(err => {
+          setLoading(false)
+          console.log(err)
+        })
     }
   })
 
@@ -90,7 +116,14 @@ const AdminLoginForm = ({
             </Typography>
           )}
         </FormControl>
-        <Button fullWidth size='large' variant='contained' sx={{ marginBottom: 2, marginTop: 3 }} type='submit'>
+        <Button
+          disabled={loading}
+          fullWidth
+          size='large'
+          variant='contained'
+          sx={{ marginBottom: 2, marginTop: 3 }}
+          type='submit'
+        >
           Login as Admin
         </Button>
       </form>
