@@ -27,9 +27,7 @@ const Home = () => {
           </p>
           <button onClick={() => setIsOpen(true)}>Get Started</button>
         </div>
-        <div className='rightSide1'>
-          <div className='image'></div>
-        </div>
+        <div className='rightSide1'>{/* <div className='image'></div> */}</div>
       </div>
 
       <div className='shortInfo'>
