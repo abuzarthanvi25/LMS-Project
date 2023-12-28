@@ -17,13 +17,20 @@ const UserSelectionModal = ({ isOpen, onClose }) => {
     setSelectedCard(cardType)
   }
 
-  const handleLogin = payload => {
-    console.log(payload)
-  }
-
-  const handleRegister = payload => {
-    console.log(payload)
-  }
+  const roles = [
+    {
+      role: 'Student',
+      image: 'https://cdn2.iconfinder.com/data/icons/learning-6/64/Student-Graduate-256.png'
+    },
+    {
+      role: 'Teacher',
+      image: 'https://cdn1.iconfinder.com/data/icons/education-outline-16/60/023_-_Teaching-256.png'
+    },
+    {
+      role: 'Admin',
+      image: 'https://cdn2.iconfinder.com/data/icons/essential-web-2/50/user-add-plus-create-admin-256.png'
+    }
+  ]
 
   const renderCardContent = () => {
     switch (selectedCard) {
@@ -31,7 +38,9 @@ const UserSelectionModal = ({ isOpen, onClose }) => {
         // Render Student form or component
         return (
           <div>
-            <Typography style={{ textAlign: 'center' }}>Student Form Here</Typography>
+            {/* <Typography variant='h5' sx={{ fontWeight: 600, textAlign: 'center' }}>
+              Student
+            </Typography> */}
             {isRegisterMode ? (
               <StudentRegisterForm
                 onSubmit={values => handleRegister(values)}
@@ -55,7 +64,9 @@ const UserSelectionModal = ({ isOpen, onClose }) => {
         // Render Teacher form or component
         return (
           <div>
-            <Typography style={{ textAlign: 'center' }}>Teacher Form Here</Typography>
+            {/* <Typography variant='h5' sx={{ fontWeight: 600, textAlign: 'center' }}>
+              Teacher
+            </Typography> */}
             {isTeacherRegistration ? (
               <TeacherRegisterForm
                 onSubmit={values => console.log(values)}
@@ -77,7 +88,9 @@ const UserSelectionModal = ({ isOpen, onClose }) => {
         // Render Admin form or component
         return (
           <div>
-            <Typography style={{ textAlign: 'center' }}>Admin Form Here</Typography>
+            {/* <Typography variant='h5' sx={{ fontWeight: 600, textAlign: 'center' }}>
+              Administrator
+            </Typography> */}
             <AdminLoginForm onSubmit={values => console.log(values)} loginSubtitle='' loginTitle='Admin Login' />
           </div>
         )
@@ -101,63 +114,34 @@ const UserSelectionModal = ({ isOpen, onClose }) => {
       >
         <Card>
           <CardContent>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Typography variant='h5' gutterBottom>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Typography variant='h6' style={{ textAlign: 'center' }} gutterBottom>
                 Select User Type
               </Typography>
-              <Button className='crossBtn' onClick={onClose} variant='contained' color='primary'>
+              <Button className='crossBtn' onClick={onClose} variant='contained' color='error'>
                 x
               </Button>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-around', margin: '20px 0px' }}>
-              <Card
-                className={selectedCard == 'Student' ? 'active' : 'inactive'}
-                onClick={() => handleCardSelect('Student')}
-                style={{ cursor: 'pointer', width: '150px' }}
-              >
-                <CardContent style={{ textAlign: 'center' }}>
-                  <Typography style={{ marginBottom: '15px' }} variant='h6'>
-                    Student
-                  </Typography>
-                  <img
-                    src='https://cdn2.iconfinder.com/data/icons/learning-6/64/Student-Graduate-256.png'
-                    alt='Student'
-                    style={{ maxWidth: '100%', height: 'auto', objectFit: 'contain' }}
-                  />
-                </CardContent>
-              </Card>
-              <Card
-                className={selectedCard == 'Teacher' ? 'active' : 'inactive'}
-                onClick={() => handleCardSelect('Teacher')}
-                style={{ cursor: 'pointer', width: '150px' }}
-              >
-                <CardContent style={{ textAlign: 'center' }}>
-                  <Typography style={{ marginBottom: '15px' }} variant='h6'>
-                    Teacher
-                  </Typography>
-                  <img
-                    src='https://cdn1.iconfinder.com/data/icons/education-outline-16/60/023_-_Teaching-256.png'
-                    alt='Teacher'
-                    style={{ maxWidth: '100%', height: 'auto', objectFit: 'contain' }}
-                  />
-                </CardContent>
-              </Card>
-              <Card
-                className={selectedCard == 'Admin' ? 'active' : 'inactive'}
-                onClick={() => handleCardSelect('Admin')}
-                style={{ cursor: 'pointer', width: '150px' }}
-              >
-                <CardContent style={{ textAlign: 'center' }}>
-                  <Typography style={{ marginBottom: '15px' }} variant='h6'>
-                    Admin
-                  </Typography>
-                  <img
-                    src='https://cdn2.iconfinder.com/data/icons/essential-web-2/50/user-add-plus-create-admin-256.png'
-                    alt='Admin'
-                    style={{ maxWidth: '100%', height: 'auto', objectFit: 'contain' }}
-                  />
-                </CardContent>
-              </Card>
+              {roles.map((instance, index) => (
+                <Card
+                  key={index}
+                  className={selectedCard == instance.role ? 'active' : 'inactive'}
+                  onClick={() => handleCardSelect(instance.role)}
+                  style={{ cursor: 'pointer', width: '150px' }}
+                >
+                  <CardContent style={{ textAlign: 'center', height: '100%' }}>
+                    <Typography style={{ marginBottom: '0px', fontSize: '14px' }} variant='h6'>
+                      {instance.role}
+                    </Typography>
+                    <img
+                      src={instance.image}
+                      alt={instance.role}
+                      style={{ maxWidth: '100%', height: 'auto', objectFit: 'cover' }}
+                    />
+                  </CardContent>
+                </Card>
+              ))}
             </div>
             {renderCardContent()}
           </CardContent>

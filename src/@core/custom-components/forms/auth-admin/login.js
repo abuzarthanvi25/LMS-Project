@@ -67,7 +67,7 @@ const AdminLoginForm = ({
   return (
     <Fragment>
       <Box>
-        <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
+        <Typography sx={{ fontWeight: 600, marginBottom: 1.5, textAlign: 'center' }} variant='h5'>
           {loginTitle}
         </Typography>
         <Typography variant='body2'>{loginSubtitle}</Typography>

@@ -91,7 +91,7 @@ const TeacherRegisterForm = ({
   return (
     <Fragment>
       <Box>
-        <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
+        <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5, textAlign: 'center' }}>
           {loginTitle}
         </Typography>
         <Typography variant='body2'>{loginSubtitle}</Typography>
