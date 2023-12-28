@@ -12,10 +12,11 @@ import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import Button from '@mui/material/Button'
 import { Box, Typography } from '@mui/material'
 import { studentLoginInitialValues, studentLoginValidationSchema } from 'src/@core/utils/validations/student'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { loginUserRequest } from '../../../../store/reducers/authReducer'
 import { showFaliureToast, showSuccessToast } from 'src/configs/app-toast'
 import { useRouter } from 'next/router'
+import { unwrapResult } from '@reduxjs/toolkit'
 
 const StudentLoginForm = ({
   onSubmit,
@@ -26,6 +27,10 @@ const StudentLoginForm = ({
 }) => {
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
+
+  const [values, setValues] = useState({
+    showPassword: false
+  })
 
   const router = useRouter()
 
@@ -41,24 +46,21 @@ const StudentLoginForm = ({
       }
 
       dispatch(loginUserRequest({ body: payload }))
+        .then(unwrapResult)
         .then(res => {
-          if (res.error) {
-            showFaliureToast(res?.payload?.response?.data?.message)
-          } else {
-            router.push('/dashboard')
-            showSuccessToast(res?.message)
-          }
+          showSuccessToast(res?.data?.message)
+          router.push('/dashboard')
           setLoading(false)
         })
         .catch(err => {
+          showFaliureToast(err?.response?.data?.message)
           setLoading(false)
-          console.log(err)
         })
     }
   })
 
   const handleClickShowPassword = () => {
-    formik.setValues({ ...formik.values, showPassword: !formik.values.showPassword })
+    setValues({ showPassword: !values.showPassword })
   }
 
   const handleMouseDownPassword = event => {
@@ -87,6 +89,8 @@ const StudentLoginForm = ({
         />
         <FormControl fullWidth>
           <InputLabel
+            size='small'
+            error={formik.touched.password && Boolean(formik.errors.password)}
             style={{
               color: theme => (formik.touched.password && formik.errors.password ? theme.palette.error.main : undefined)
             }}
@@ -97,7 +101,7 @@ const StudentLoginForm = ({
           <OutlinedInput
             label='Password'
             id='auth-login-password'
-            type={formik.values.showPassword ? 'text' : 'password'}
+            type={values.showPassword ? 'text' : 'password'}
             error={formik.touched.password && Boolean(formik.errors.password)}
             {...formik.getFieldProps('password')}
             size='small' // Added to make the field smaller
@@ -109,7 +113,7 @@ const StudentLoginForm = ({
                   onMouseDown={handleMouseDownPassword}
                   aria-label='toggle password visibility'
                 >
-                  {formik.values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
+                  {values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
                 </IconButton>
               </InputAdornment>
             }

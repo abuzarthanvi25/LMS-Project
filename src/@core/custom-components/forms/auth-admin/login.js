@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux'
 import { showFaliureToast, showSuccessToast } from 'src/configs/app-toast'
 import { loginUserRequest } from 'src/store/reducers/authReducer'
 import { useRouter } from 'next/router'
+import { unwrapResult } from '@reduxjs/toolkit'
 
 const AdminLoginForm = ({
   loginTitle = `Welcome to ${themeConfig.templateName}! 👋🏻`,
@@ -23,6 +24,11 @@ const AdminLoginForm = ({
 }) => {
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
+
+  const [values, setValues] = useState({
+    showPassword: false
+  })
+
   const router = useRouter()
 
   const formik = useFormik({
@@ -37,25 +43,21 @@ const AdminLoginForm = ({
       }
 
       dispatch(loginUserRequest({ body: payload }))
+        .then(unwrapResult)
         .then(res => {
-          console.log(res)
-          if (res.error) {
-            showFaliureToast(res?.payload?.response?.data?.message)
-          } else {
-            router.push('/dashboard')
-            showSuccessToast(res?.message)
-          }
+          showSuccessToast(res?.data?.message)
+          router.push('/dashboard')
           setLoading(false)
         })
         .catch(err => {
+          showFaliureToast(err?.response?.data?.message)
           setLoading(false)
-          console.log(err)
         })
     }
   })
 
   const handleClickShowPassword = () => {
-    formik.setValues({ ...formik.values, showPassword: !formik.values.showPassword })
+    setValues({ showPassword: !values.showPassword })
   }
 
   const handleMouseDownPassword = event => {
@@ -84,6 +86,8 @@ const AdminLoginForm = ({
         />
         <FormControl fullWidth>
           <InputLabel
+            size='small'
+            error={formik.touched.password && Boolean(formik.errors.password)}
             style={{
               color: theme => (formik.touched.password && formik.errors.password ? theme.palette.error.main : undefined)
             }}
@@ -94,7 +98,7 @@ const AdminLoginForm = ({
           <OutlinedInput
             label='Password'
             id='auth-login-password'
-            type={formik.values.showPassword ? 'text' : 'password'}
+            type={values.showPassword ? 'text' : 'password'}
             error={formik.touched.password && Boolean(formik.errors.password)}
             {...formik.getFieldProps('password')}
             size='small' // Added to make the field smaller
@@ -106,7 +110,7 @@ const AdminLoginForm = ({
                   onMouseDown={handleMouseDownPassword}
                   aria-label='toggle password visibility'
                 >
-                  {formik.values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
+                  {values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
                 </IconButton>
               </InputAdornment>
             }

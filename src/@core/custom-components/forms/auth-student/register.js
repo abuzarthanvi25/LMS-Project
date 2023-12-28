@@ -35,6 +35,10 @@ const StudentRegisterForm = ({
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
 
+  const [values, setValues] = useState({
+    showPassword: false
+  })
+
   const formik = useFormik({
     initialValues: studentRegisterInitialValues,
     validationSchema: studentRegisterValidationSchema,
@@ -68,7 +72,7 @@ const StudentRegisterForm = ({
   const [isPolicyAccepted, setIsPolicyAccepted] = useState(false)
 
   const handleClickShowPassword = () => {
-    formik.setValues({ ...formik.values, showPassword: !formik.values.showPassword })
+    setValues({ showPassword: !values.showPassword })
   }
 
   const handleMouseDownPassword = event => {
@@ -108,6 +112,8 @@ const StudentRegisterForm = ({
         />
         <FormControl fullWidth>
           <InputLabel
+            size='small'
+            error={formik.touched.password && Boolean(formik.errors.password)}
             style={{
               color: theme => (formik.touched.password && formik.errors.password ? theme.palette.error.main : undefined)
             }}
@@ -119,7 +125,7 @@ const StudentRegisterForm = ({
             label='Password'
             id='auth-login-password'
             size='small'
-            type={formik.values.showPassword ? 'text' : 'password'}
+            type={values.showPassword ? 'text' : 'password'}
             error={formik.touched.password && Boolean(formik.errors.password)}
             {...formik.getFieldProps('password')}
             endAdornment={
@@ -130,7 +136,7 @@ const StudentRegisterForm = ({
                   onMouseDown={handleMouseDownPassword}
                   aria-label='toggle password visibility'
                 >
-                  {formik.values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
+                  {values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
                 </IconButton>
               </InputAdornment>
             }

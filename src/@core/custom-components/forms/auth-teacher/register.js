@@ -25,6 +25,10 @@ const TeacherRegisterForm = ({
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false)
 
+  const [values, setValues] = useState({
+    showPassword: false
+  })
+
   const formik = useFormik({
     initialValues: teacherRegisterInitialValues,
     validationSchema: teacherRegisterValidationSchema,
@@ -77,7 +81,7 @@ const TeacherRegisterForm = ({
   })
 
   const handleClickShowPassword = () => {
-    formik.setValues({ ...formik.values, showPassword: !formik.values.showPassword })
+    setValues({ showPassword: !values.showPassword })
   }
 
   const handleMouseDownPassword = event => {
@@ -121,11 +125,17 @@ const TeacherRegisterForm = ({
           </Grid>
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
-              <InputLabel htmlFor='auth-login-password'>Password</InputLabel>
+              <InputLabel
+                size='small'
+                error={formik.touched.password && Boolean(formik.errors.password)}
+                htmlFor='auth-login-password'
+              >
+                Password
+              </InputLabel>
               <OutlinedInput
                 label='Password'
                 id='auth-login-password'
-                type={formik.values.showPassword ? 'text' : 'password'}
+                type={values.showPassword ? 'text' : 'password'}
                 {...formik.getFieldProps('password')}
                 size='small'
                 endAdornment={
@@ -136,7 +146,7 @@ const TeacherRegisterForm = ({
                       onMouseDown={handleMouseDownPassword}
                       aria-label='toggle password visibility'
                     >
-                      {formik.values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
+                      {values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
                     </IconButton>
                   </InputAdornment>
                 }
@@ -150,7 +160,13 @@ const TeacherRegisterForm = ({
           </Grid>
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
-              <InputLabel htmlFor='education'>Education</InputLabel>
+              <InputLabel
+                size='small'
+                error={formik.touched.education && Boolean(formik.errors.education)}
+                htmlFor='education'
+              >
+                Education
+              </InputLabel>
               <Select
                 id='education'
                 name='education'
@@ -178,7 +194,13 @@ const TeacherRegisterForm = ({
 
           <Grid item xs={12} sm={6}>
             <FormControl fullWidth>
-              <InputLabel htmlFor='subject'>Subjects</InputLabel>
+              <InputLabel
+                error={formik.touched.subject && Boolean(formik.errors.subject)}
+                size='small'
+                htmlFor='subject'
+              >
+                Subjects
+              </InputLabel>
               <Select
                 id='subject'
                 name='subject'
@@ -207,8 +229,9 @@ const TeacherRegisterForm = ({
             <TextField
               fullWidth
               id='bankAccount'
-              label='bankAccount'
+              label='Bank Account Number'
               variant='outlined'
+              type='number'
               size='small'
               {...formik.getFieldProps('bankAccount')}
               error={formik.touched.bankAccount && Boolean(formik.errors.bankAccount)}
