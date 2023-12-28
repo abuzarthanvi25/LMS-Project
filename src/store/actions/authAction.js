@@ -13,7 +13,7 @@ const requestHeaders = token => {
 
 async function login(payload, thunkAPI) {
   try {
-    const response = await ApiResource.post(ApiConstants.login, payload?.body, requestHeaders(payload?.token))
+    const response = await ApiResource.post(ApiConstants.login, payload?.body)
 
     return response
   } catch (error) {

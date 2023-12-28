@@ -25,7 +25,6 @@ const StudentLoginForm = ({
   isRegisterMode
 }) => {
   const dispatch = useDispatch()
-  const { registrationDetails } = useSelector(state => state.auth)
   const [loading, setLoading] = useState(false)
 
   const router = useRouter()
@@ -41,7 +40,7 @@ const StudentLoginForm = ({
         password: values.password
       }
 
-      dispatch(loginUserRequest({ body: payload, token: registrationDetails?.token }))
+      dispatch(loginUserRequest({ body: payload }))
         .then(res => {
           if (res.error) {
             showFaliureToast(res?.payload?.response?.data?.message)

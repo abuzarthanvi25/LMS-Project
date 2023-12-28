@@ -1,6 +1,5 @@
 import React, { Fragment, useState } from 'react'
 import { useFormik } from 'formik'
-import * as Yup from 'yup'
 import themeConfig from 'src/configs/themeConfig'
 import TextField from '@mui/material/TextField'
 import FormControl from '@mui/material/FormControl'
@@ -13,7 +12,7 @@ import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import Button from '@mui/material/Button'
 import { Box, Typography } from '@mui/material'
 import { teacherLoginInitialValues, teacherLoginValidationSchema } from 'src/@core/utils/validations/teacher'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { loginUserRequest } from 'src/store/reducers/authReducer'
 import { showFaliureToast, showSuccessToast } from 'src/configs/app-toast'
 import { useRouter } from 'next/router'
@@ -27,7 +26,6 @@ const TeacherLoginForm = ({
   const dispatch = useDispatch()
 
   const [isRegisterMode, setIsRegisterMode] = useState(false)
-  const { registrationDetails } = useSelector(state => state.auth)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
@@ -42,7 +40,7 @@ const TeacherLoginForm = ({
         password: values.password
       }
 
-      dispatch(loginUserRequest({ body: payload, token: registrationDetails?.token }))
+      dispatch(loginUserRequest({ body: payload }))
         .then(res => {
           console.log(res)
           if (res.error) {

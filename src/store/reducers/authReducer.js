@@ -9,8 +9,7 @@ const loadingStates = {
 let initialState = {
   error: null,
   loading: loadingStates.idle,
-  userDetails: null,
-  registrationDetails: null
+  userDetails: null
 }
 
 export const loginUserRequest = createAsyncThunk('AuthReducer/loginUserRequest', async (payload, thunkApi) => {
@@ -51,32 +50,6 @@ const AuthReducer = createReducer(initialState, {
       error: action.payload?.response?.data,
       loading: loadingStates.idle,
       userDetails: null
-    }
-  },
-
-  [registerUserRequest.pending]: state => {
-    return {
-      ...state,
-      error: null,
-      loading: loadingStates.pending
-    }
-  },
-
-  [registerUserRequest.fulfilled]: (state, action) => {
-    return {
-      ...state,
-      error: null,
-      loading: loadingStates.idle,
-      registrationDetails: { ...action.payload.data }
-    }
-  },
-
-  [registerUserRequest.rejected]: (state, action) => {
-    return {
-      ...state,
-      error: action.payload?.response?.data,
-      loading: loadingStates.idle,
-      registrationDetails: null
     }
   },
 
