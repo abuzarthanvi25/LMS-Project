@@ -1,6 +1,5 @@
 import { persistReducer } from 'redux-persist'
 import { configureStore } from '@reduxjs/toolkit'
-import { createLogger } from 'redux-logger'
 import { persistStore } from 'redux-persist'
 import { rootReducer } from './reducers'
 import thunkMiddleware from 'redux-thunk'
@@ -13,7 +12,7 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
-const middlewares = [thunkMiddleware, createLogger()]
+const middlewares = [thunkMiddleware]
 
 const store = configureStore({
   reducer: persistedReducer,
