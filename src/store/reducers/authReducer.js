@@ -28,6 +28,9 @@ export const registerUserRequest = createAsyncThunk('AuthReducer/registerUserReq
 
 const authReducer = createReducer(initialState, builder => {
   builder
+
+    //NOTE - Login cases
+
     .addCase(loginUserRequest.pending, state => {
       state.error = null
       state.loading = loadingStates.pending
@@ -42,6 +45,9 @@ const authReducer = createReducer(initialState, builder => {
       state.loading = loadingStates.idle
       state.userDetails = null
     })
+
+    //NOTE - Logout case
+
     .addCase(logoutUserRequest.fulfilled, () => {
       return initialState
     })
