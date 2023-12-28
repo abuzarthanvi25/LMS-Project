@@ -11,6 +11,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+
+      .render{
+        background-color: red;
+      }
   
       .leftSide {
         width: 500px;
@@ -600,7 +604,7 @@ li {
         left: 0;
         top: 0px;
         background-size: contain;
-        background-image: url('../../public/images/custom-images/opacity2.png');
+        background-image: url('../../public/images/custom-images/vecteezy_abstract-geometric-background-blue-and-white-colors_18756057-1.jpg');
         @media screen and (max-width: 768px) {
           display: none;
           }
@@ -625,7 +629,7 @@ li {
       }
     }
     .active{
-      box-shadow: 0px 4px 8px -4px gray;
+      box-shadow:  10px 10px 5px 0px gray;
       border: 1px solid #16B1FF;
     }
   }
