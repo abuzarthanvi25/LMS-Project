@@ -6,7 +6,7 @@ const loadingStates = {
   pending: 'pending'
 }
 
-let initialState = {
+const initialState = {
   error: null,
   loading: loadingStates.idle,
   userDetails: null
@@ -26,38 +26,25 @@ export const registerUserRequest = createAsyncThunk('AuthReducer/registerUserReq
   return response
 })
 
-const AuthReducer = createReducer(initialState, {
-  [loginUserRequest.pending]: state => {
-    return {
-      ...state,
-      error: null,
-      loading: loadingStates.pending
-    }
-  },
-
-  [loginUserRequest.fulfilled]: (state, action) => {
-    return {
-      ...state,
-      error: null,
-      loading: loadingStates.idle,
-      userDetails: { ...action.payload.data }
-    }
-  },
-
-  [loginUserRequest.rejected]: (state, action) => {
-    return {
-      ...state,
-      error: action.payload?.response?.data,
-      loading: loadingStates.idle,
-      userDetails: null
-    }
-  },
-
-  [logoutUserRequest.fulfilled]: (state, action) => {
-    return {
-      ...initialState
-    }
-  }
+const authReducer = createReducer(initialState, builder => {
+  builder
+    .addCase(loginUserRequest.pending, state => {
+      state.error = null
+      state.loading = loadingStates.pending
+    })
+    .addCase(loginUserRequest.fulfilled, (state, action) => {
+      state.error = null
+      state.loading = loadingStates.idle
+      state.userDetails = { ...action.payload.data }
+    })
+    .addCase(loginUserRequest.rejected, (state, action) => {
+      state.error = action.payload?.response?.data
+      state.loading = loadingStates.idle
+      state.userDetails = null
+    })
+    .addCase(logoutUserRequest.fulfilled, () => {
+      return initialState
+    })
 })
 
-export default AuthReducer
+export default authReducer

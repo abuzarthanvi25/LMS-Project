@@ -61,17 +61,20 @@ const Home = () => {
           <h1>{trainerRegistration && trainerRegistration.length >= 10 && trainerRegistration.length}</h1>
         </div>
       </div>
-      
+
       <div className='sec-padded'>
         <div className='container'>
           <div className='contentSection'>
             <div className='image'>
-            <img  src='images/custom-images/ls_medium.jpg'  />
+              <img alt='' src='images/custom-images/ls_medium.jpg' />
             </div>
             <div className='content'>
-              <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Labore corporis, suscipit numquam corrupti ullam similique porro dolore laboriosam. Sapiente, consequuntur voluptate! Qui dolore sunt cupiditate quasi earum repellendus numquam expedita?</p>
+              <p>
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Labore corporis, suscipit numquam corrupti
+                ullam similique porro dolore laboriosam. Sapiente, consequuntur voluptate! Qui dolore sunt cupiditate
+                quasi earum repellendus numquam expedita?
+              </p>
             </div>
-
           </div>
         </div>
       </div>
@@ -80,66 +83,94 @@ const Home = () => {
         <div className='container'>
           <div className='contentSection sty2'>
             <div className='image'>
-            <img  src='images/custom-images/ls_medium.jpg'  />
+              <img alt='' src='images/custom-images/ls_medium.jpg' />
             </div>
             <div className='content'>
-              <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Labore corporis, suscipit numquam corrupti ullam similique porro dolore laboriosam. Sapiente, consequuntur voluptate! Qui dolore sunt cupiditate quasi earum repellendus numquam expedita?</p>
+              <p>
+                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Labore corporis, suscipit numquam corrupti
+                ullam similique porro dolore laboriosam. Sapiente, consequuntur voluptate! Qui dolore sunt cupiditate
+                quasi earum repellendus numquam expedita?
+              </p>
             </div>
-
           </div>
         </div>
       </div>
 
-      <div class="footer">
-        <div class="inner-footer">
-
-          <div class="footer-items">
+      <div className='footer'>
+        <div className='inner-footer'>
+          <div className='footer-items'>
             <h1>Company Name</h1>
             <p>Description of any product or motto of the company.</p>
           </div>
 
-          <div class="footer-items">
+          <div className='footer-items'>
             <h3>Quick Links</h3>
-            <div class="border1"></div>
-              <ul>
-                <a href="#"><li>Home</li></a>
-                <a href="#"><li>Search</li></a>
-                <a href="#"><li>Contact</li></a>
-                <a href="#"><li>About</li></a>
-              </ul>
+            <div className='border1'></div>
+            <ul>
+              <a href='#'>
+                <li>Home</li>
+              </a>
+              <a href='#'>
+                <li>Search</li>
+              </a>
+              <a href='#'>
+                <li>Contact</li>
+              </a>
+              <a href='#'>
+                <li>About</li>
+              </a>
+            </ul>
           </div>
 
-          <div class="footer-items">
+          <div className='footer-items'>
             <h3>Recipes</h3>
-            <div class="border1"></div> 
-              <ul>
-                <a href="#"><li>Indian</li></a>
-                <a href="#"><li>Chinese</li></a>
-                <a href="#"><li>Mexican</li></a>
-                <a href="#"><li>Italian</li></a>
-              </ul>
+            <div className='border1'></div>
+            <ul>
+              <a href='#'>
+                <li>Indian</li>
+              </a>
+              <a href='#'>
+                <li>Chinese</li>
+              </a>
+              <a href='#'>
+                <li>Mexican</li>
+              </a>
+              <a href='#'>
+                <li>Italian</li>
+              </a>
+            </ul>
           </div>
 
-          <div class="footer-items">
+          <div className='footer-items'>
             <h3>Contact us</h3>
-            <div class="border1"></div>
-              <ul>
-                <li><i class="fa fa-map-marker" aria-hidden="true"></i>XYZ, abc</li>
-                <li><i class="fa fa-phone" aria-hidden="true"></i>123456789</li>
-                <li><i class="fa fa-envelope" aria-hidden="true"></i>xyz@gmail.com</li>
-              </ul> 
-            
-              <div class="social-media">
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-facebook"></i></a>
-                <a href="#"><i class="fab fa-google-plus-square"></i></a>
-              </div> 
+            <div className='border1'></div>
+            <ul>
+              <li>
+                <i className='fa fa-map-marker' aria-hidden='true'></i>XYZ, abc
+              </li>
+              <li>
+                <i className='fa fa-phone' aria-hidden='true'></i>123456789
+              </li>
+              <li>
+                <i className='fa fa-envelope' aria-hidden='true'></i>xyz@gmail.com
+              </li>
+            </ul>
+
+            <div className='social-media'>
+              <a href='#'>
+                <i className='fab fa-instagram'></i>
+              </a>
+              <a href='#'>
+                <i className='fab fa-facebook'></i>
+              </a>
+              <a href='#'>
+                <i className='fab fa-google-plus-square'></i>
+              </a>
+            </div>
           </div>
         </div>
-  
-        <div class="footer-bottom">
-          All rights reserved
-        </div>
+
+        <div className='footer-bottom'>All rights reserved</div>
       </div>
     </section>
   )
