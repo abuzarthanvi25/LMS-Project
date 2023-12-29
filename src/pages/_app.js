@@ -76,10 +76,8 @@ const App = props => {
                 <ThemeComponent settings={settings}>
                   {getLayout(
                     <>
-                      <AuthRedirector>
-                        <Component {...pageProps} />
-                        <Toast />
-                      </AuthRedirector>
+                      <Component {...pageProps} />
+                      <Toast />
                     </>
                   )}
                 </ThemeComponent>
