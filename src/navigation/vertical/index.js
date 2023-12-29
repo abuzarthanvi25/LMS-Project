@@ -5,68 +5,52 @@ import CubeOutline from 'mdi-material-ui/CubeOutline'
 import HomeOutline from 'mdi-material-ui/HomeOutline'
 import FormatLetterCase from 'mdi-material-ui/FormatLetterCase'
 import AccountCogOutline from 'mdi-material-ui/AccountCogOutline'
+import Account from 'mdi-material-ui/AccountOutline'
 import CreditCardOutline from 'mdi-material-ui/CreditCardOutline'
-import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
+import Course from 'mdi-material-ui/FolderFileOutline'
 import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
 import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
 
 const navigation = () => {
   return [
     {
+      sectionTitle: 'Home'
+    },
+    {
       title: 'Dashboard',
       icon: HomeOutline,
       path: '/dashboard'
     },
     {
-      title: 'Account Settings',
-      icon: AccountCogOutline,
-      path: '/account-settings'
+      sectionTitle: 'Profile'
     },
     {
-      sectionTitle: 'Pages'
+      title: 'My Profile',
+      icon: Account,
+      path: '/profile'
     },
     {
-      title: 'Login',
-      icon: Login,
-      path: '/login',
+      sectionTitle: 'Courses'
     },
     {
-      title: 'Register',
-      icon: AccountPlusOutline,
-      path: '/register',
+      title: 'Course 1',
+      icon: Course,
+      path: '/dashboard/#'
     },
     {
-      title: 'Error',
-      icon: AlertCircleOutline,
-      path: '/error',
+      title: 'Course 2',
+      icon: Course,
+      path: '/dashboard/#'
     },
     {
-      sectionTitle: 'User Interface'
+      title: 'Course 3',
+      icon: Course,
+      path: '/dashboard/#'
     },
     {
-      title: 'Typography',
-      icon: FormatLetterCase,
-      path: '/typography'
-    },
-    {
-      title: 'Icons',
-      path: '/icons',
-      icon: GoogleCirclesExtended
-    },
-    {
-      title: 'Cards',
-      icon: CreditCardOutline,
-      path: '/cards'
-    },
-    {
-      title: 'Tables',
-      icon: Table,
-      path: '/tables'
-    },
-    {
-      icon: CubeOutline,
-      title: 'Form Layouts',
-      path: '/form-layouts'
+      title: 'Course 4',
+      icon: Course,
+      path: '/dashboard/#'
     }
   ]
 }
