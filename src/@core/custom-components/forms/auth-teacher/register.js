@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton'
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import Button from '@mui/material/Button'
-import { Box, Typography, Grid, MenuItem, Select, Chip } from '@mui/material'
+import { Box, Typography, Grid, MenuItem, Select, Chip, CircularProgress } from '@mui/material'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { teacherRegisterInitialValues, teacherRegisterValidationSchema } from 'src/@core/utils/validations/teacher'
 import { useDispatch } from 'react-redux'
@@ -271,7 +271,7 @@ const TeacherRegisterForm = ({
               sx={{ marginBottom: 2, marginTop: 3 }}
               type='submit'
             >
-              Register as Teacher
+              {loading ? <CircularProgress size={20} /> : 'Register as Teacher'}
             </Button>
           </Grid>
           <Grid item xs={12}>

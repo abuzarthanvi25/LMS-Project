@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton'
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import Button from '@mui/material/Button'
-import { Box, Typography } from '@mui/material'
+import { Box, CircularProgress, Typography } from '@mui/material'
 import { teacherLoginInitialValues, teacherLoginValidationSchema } from 'src/@core/utils/validations/teacher'
 import { useDispatch } from 'react-redux'
 import { loginUserRequest } from 'src/store/reducers/authReducer'
@@ -136,7 +136,7 @@ const TeacherLoginForm = ({
           sx={{ marginBottom: 2, marginTop: 3 }}
           type='submit'
         >
-          {'Login'}
+          {loading ? <CircularProgress size={20} /> : 'Login'}
         </Button>
         <Box sx={{ textAlign: 'center', marginTop: 2 }}>
           <Typography variant='body2'>

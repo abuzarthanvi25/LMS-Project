@@ -12,7 +12,7 @@ import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Button from '@mui/material/Button'
-import { Box, Typography } from '@mui/material'
+import { Box, CircularProgress, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import Link from 'next/link'
 import { studentRegisterInitialValues, studentRegisterValidationSchema } from 'src/@core/utils/validations/student'
@@ -167,7 +167,7 @@ const StudentRegisterForm = ({
           sx={{ marginBottom: 7, marginTop: 3 }}
           type='submit'
         >
-          Register
+          {loading ? <CircularProgress size={20} /> : 'Register'}
         </Button>
         <Box sx={{ textAlign: 'center', marginTop: 2 }}>
           <Typography variant='body2'>

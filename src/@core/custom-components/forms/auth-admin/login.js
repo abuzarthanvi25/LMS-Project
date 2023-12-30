@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton'
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
 import Button from '@mui/material/Button'
-import { Box, Typography } from '@mui/material'
+import { Box, CircularProgress, Typography } from '@mui/material'
 import { adminLoginInitialValues, adminLoginValidationSchema } from 'src/@core/utils/validations/teacher'
 import { useDispatch } from 'react-redux'
 import { showFaliureToast, showSuccessToast } from 'src/configs/app-toast'
@@ -129,7 +129,7 @@ const AdminLoginForm = ({
           sx={{ marginBottom: 2, marginTop: 3 }}
           type='submit'
         >
-          Login as Admin
+          {loading ? <CircularProgress size={20} /> : 'Login as Admin'}
         </Button>
       </form>
     </Fragment>
