@@ -79,6 +79,7 @@ const AccountSettings = () => {
           src='/images/custom-images/banner.jpg'
         />
       </ProfileBanner>
+
       <Box>
         <ImgStyled src={imgSrc} alt='Profile Pic' />
       </Box>
