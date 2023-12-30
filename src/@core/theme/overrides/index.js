@@ -7,7 +7,8 @@ import MuiMenu from './menu'
 import MuiTabs from './tabs'
 import MuiInput from './input'
 import MuiPaper from './paper'
-import MuiTable from './table'
+
+// import MuiTable from './table'
 import MuiAlerts from './alerts'
 import MuiButton from './button'
 import MuiDialog from './dialog'
@@ -21,7 +22,8 @@ import MuiBackdrop from './backdrop'
 import MuiSnackbar from './snackbar'
 import MuiSwitches from './switches'
 import MuiTimeline from './timeline'
-import MuiAccordion from './accordion'
+
+// import MuiAccordion from './accordion'
 import MuiPagination from './pagination'
 import MuiTypography from './typography'
 import MuiToggleButton from './toggleButton'
@@ -34,7 +36,8 @@ const Overrides = theme => {
   const tabs = MuiTabs(theme)
   const cards = MuiCard(theme)
   const input = MuiInput(theme)
-  const tables = MuiTable(theme)
+
+  // const tables = MuiTable(theme)
   const alerts = MuiAlerts(theme)
   const button = MuiButton(theme)
   const rating = MuiRating(theme)
@@ -47,7 +50,8 @@ const Overrides = theme => {
   const snackbar = MuiSnackbar(theme)
   const switches = MuiSwitches(theme)
   const timeline = MuiTimeline(theme)
-  const accordion = MuiAccordion(theme)
+
+  // const accordion = MuiAccordion(theme)
   const pagination = MuiPagination(theme)
   const dateTimePicker = MuiDateTimePicker(theme)
 
@@ -62,7 +66,8 @@ const Overrides = theme => {
     button,
     dialog,
     rating,
-    tables,
+
+    // tables,
     avatars,
     divider,
     MuiLink,
@@ -73,7 +78,8 @@ const Overrides = theme => {
     snackbar,
     switches,
     timeline,
-    accordion,
+
+    // accordion,
     MuiSelect,
     pagination,
     MuiTypography,
