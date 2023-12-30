@@ -140,15 +140,17 @@ const ProfileDetails = ({ profileDetails, token, getProfileDetailsRequest }) => 
 
   useEffect(() => {
     handleGetProfileDetails()
-  }, [token])
+  }, [])
 
   const handleGetProfileDetails = () => {
     try {
-      setLoading(true)
-      getProfileDetailsRequest({ token })
-        .then(unwrapResult)
-        .then(() => setLoading(false))
-        .catch(error => showFaliureToast(error?.response?.data?.message))
+      if (token) {
+        setLoading(true)
+        getProfileDetailsRequest({ token })
+          .then(unwrapResult)
+          .then(() => setLoading(false))
+          .catch(error => showFaliureToast(error?.response?.data?.message))
+      }
     } catch (error) {
       setLoading(false)
     }
