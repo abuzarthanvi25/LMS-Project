@@ -158,7 +158,7 @@ const ProfileDetails = ({ profileDetails, token, getProfileDetailsRequest }) => 
     <Card style={{ boxShadow: '10px 10px 5px 0px #EBEDEF' }}>
       {loading ? (
         <SkeletonBanner>
-          <Skeleton variant='rectangular' width='100%' height='100%' />
+          <Skeleton animation='wave' variant='rectangular' width='100%' height='100%' />
         </SkeletonBanner>
       ) : (
         <ProfileBanner>
@@ -170,16 +170,23 @@ const ProfileDetails = ({ profileDetails, token, getProfileDetailsRequest }) => 
         </ProfileBanner>
       )}
 
-      <Box>
-        <ImgStyled src={imgSrc} alt='Profile Pic' />
-      </Box>
+      <Box>{loading ? <SkeletonImg /> : <ImgStyled src={imgSrc} alt='Profile Pic' />}</Box>
       <Box style={{ position: 'absolute', top: '100px', marginLeft: '20px' }}>
-        <Typography color={'white'} variant='h2'>
-          {fullName}
-        </Typography>
-        <Typography color={'white'} sx={{ fontSize: '15px', letterSpacing: '2px', fontWeight: 600 }}>
-          {role}
-        </Typography>
+        {loading ? (
+          <>
+            <Skeleton animation='wave' variant='text' width={200} height={80} />
+            <Skeleton animation='wave' variant='text' width={200} height={20} />
+          </>
+        ) : (
+          <>
+            <Typography color={'white'} variant='h2'>
+              {fullName}
+            </Typography>
+            <Typography color={'white'} sx={{ fontSize: '15px', letterSpacing: '2px', fontWeight: 600 }}>
+              {role}
+            </Typography>
+          </>
+        )}
       </Box>
       <Grid sx={{ marginTop: '50px', padding: '15px 20px', width: '100%' }} container>
         <Grid item xs={12} sm={12} md={6} sx={{ padding: '0px 15px', marginTop: '60px' }}>
@@ -192,7 +199,7 @@ const ProfileDetails = ({ profileDetails, token, getProfileDetailsRequest }) => 
               Full Name
             </Typography>
             {loading ? (
-              <Skeleton variant='text' width={200} height={40} />
+              <Skeleton animation='wave' variant='text' width={200} height={40} />
             ) : (
               <Typography variant='body' sx={{ fontWeight: 'bolder' }}>
                 {fullName}
@@ -204,7 +211,7 @@ const ProfileDetails = ({ profileDetails, token, getProfileDetailsRequest }) => 
               Email Address
             </Typography>
             {loading ? (
-              <Skeleton variant='text' width={200} height={40} />
+              <Skeleton animation='wave' variant='text' width={200} height={40} />
             ) : (
               <Typography variant='body' sx={{ fontWeight: 'bolder' }}>
                 {emailAddress}
@@ -216,7 +223,7 @@ const ProfileDetails = ({ profileDetails, token, getProfileDetailsRequest }) => 
               Account Type
             </Typography>
             {loading ? (
-              <Skeleton variant='text' width={200} height={40} />
+              <Skeleton animation='wave' variant='text' width={200} height={40} />
             ) : (
               <Typography variant='body' sx={{ fontWeight: 'bolder' }}>
                 {role}
@@ -234,7 +241,7 @@ const ProfileDetails = ({ profileDetails, token, getProfileDetailsRequest }) => 
               Education Level
             </Typography>
             {loading ? (
-              <Skeleton variant='text' width={200} height={40} />
+              <Skeleton animation='wave' variant='text' width={200} height={40} />
             ) : (
               <Typography variant='body' sx={{ fontWeight: 'bolder' }}>
                 {education ?? 'Bachelors'}

@@ -11,11 +11,11 @@ const SkeletonCourse = () => {
   return (
     <Accordion>
       <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Skeleton width='50%' />
+        <Skeleton animation='wave' width='50%' />
       </AccordionSummary>
       <AccordionDetails>
         <div style={{ width: '100%', marginTop: '8px' }}>
-          <Skeleton width='50%' />
+          <Skeleton animation='wave' width='50%' />
           <LinearProgress sx={{ borderRadius: 10 }} variant='determinate' color='success' value={0} />
         </div>
       </AccordionDetails>
