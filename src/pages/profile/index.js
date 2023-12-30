@@ -1,5 +1,5 @@
 // ** React Imports
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // ** MUI Imports
 import Box from '@mui/material/Box'
@@ -10,6 +10,12 @@ import { styled } from '@mui/material/styles'
 import 'react-datepicker/dist/react-datepicker.css'
 import { Grid, Typography } from '@mui/material'
 import CourseProgress from '../../@core/custom-components/course-progress'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { getProfileDetailsRequest } from '../../store/reducers/profileReducer'
+import { unwrapResult } from '@reduxjs/toolkit'
+import { showFaliureToast } from 'src/configs/app-toast'
+import get from 'lodash/get'
 
 const ProfileBanner = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -66,9 +72,31 @@ const ImgStyled = styled('img')(({ theme }) => ({
   }
 }))
 
-const AccountSettings = () => {
+const ProfileDetails = ({ profileDetails, token, getProfileDetailsRequest }) => {
   // ** State
   const [imgSrc, setImgSrc] = useState('/images/avatars/3.png')
+  const [loading, setLoading] = useState(false)
+
+  const fullName = get(profileDetails, 'data.fullName', '')
+  const emailAddress = get(profileDetails, 'data.emailAddress', '')
+  const role = get(profileDetails, 'data.role', 'Student')
+  const education = get(profileDetails, 'data.education', '')
+
+  useEffect(() => {
+    handleGetProfileDetails()
+  }, [token])
+
+  const handleGetProfileDetails = () => {
+    try {
+      setLoading(true)
+      getProfileDetailsRequest({ token })
+        .then(unwrapResult)
+        .then(() => setLoading(false))
+        .catch(error => showFaliureToast(error?.response?.data?.message))
+    } catch (error) {
+      setLoading(false)
+    }
+  }
 
   return (
     <Card style={{ boxShadow: '10px 10px 5px 0px #EBEDEF' }}>
@@ -85,10 +113,10 @@ const AccountSettings = () => {
       </Box>
       <Box style={{ position: 'absolute', top: '100px', marginLeft: '20px' }}>
         <Typography color={'white'} variant='h2'>
-          John Doe
+          {fullName}
         </Typography>
         <Typography color={'white'} sx={{ fontSize: '15px', letterSpacing: '2px', fontWeight: 600 }}>
-          Student
+          {role}
         </Typography>
       </Box>
       <Grid sx={{ marginTop: '50px', padding: '15px 20px', width: '100%' }} container>
@@ -102,7 +130,7 @@ const AccountSettings = () => {
               Full Name
             </Typography>
             <Typography variant='body' sx={{ fontWeight: 'bolder' }}>
-              Kumail Zaidi
+              {fullName}
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', flexWrap: 'wrap' }}>
@@ -110,7 +138,7 @@ const AccountSettings = () => {
               Email Address
             </Typography>
             <Typography variant='body' sx={{ fontWeight: 'bolder' }}>
-              kumail@gmail.com
+              {emailAddress}
             </Typography>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', flexWrap: 'wrap' }}>
@@ -118,11 +146,11 @@ const AccountSettings = () => {
               Account Type
             </Typography>
             <Typography variant='body' sx={{ fontWeight: 'bolder' }}>
-              Student
+              {role}
             </Typography>
           </Box>
         </Grid>
-        <Grid xs={12} sm={12} md={6} sx={{ padding: '0px 15px', marginTop: '60px' }}>
+        <Grid item xs={12} sm={12} md={6} sx={{ padding: '0px 15px', marginTop: '60px' }}>
           <Typography variant='h5' sx={{ fontWeight: 'bolder' }}>
             Educational Details
           </Typography>
@@ -132,7 +160,7 @@ const AccountSettings = () => {
               Education Level
             </Typography>
             <Typography variant='body' sx={{ fontWeight: 'bolder' }}>
-              Bachelors
+              {education ?? 'Bachelors'}
             </Typography>
           </Box>
         </Grid>
@@ -167,4 +195,21 @@ const AccountSettings = () => {
   )
 }
 
-export default AccountSettings
+const mapStateToProps = state => {
+  return {
+    token: state.auth.userDetails?.token,
+    profileDetails: state.profile.profileDetails,
+    rehydrated: state._persist.rehydrated
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+    {
+      getProfileDetailsRequest
+    },
+    dispatch
+  )
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileDetails)

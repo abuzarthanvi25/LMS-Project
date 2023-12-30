@@ -2,8 +2,8 @@ import { createAsyncThunk, createReducer } from '@reduxjs/toolkit'
 import { AuthApiServices } from '../actions/authAction'
 
 const loadingStates = {
-  idle: 'idle',
-  pending: 'pending'
+  idle: false,
+  pending: true
 }
 
 const initialState = {

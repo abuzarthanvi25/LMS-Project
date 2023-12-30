@@ -24,7 +24,7 @@ const Course = ({ courseName, progress }) => {
 
   return (
     <Accordion style={accordionStyle}>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />} IconButtonProps={{ edge: 'start' }}>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <Typography variant='body' sx={{ fontWeight: 500 }}>
           {courseName}
         </Typography>
