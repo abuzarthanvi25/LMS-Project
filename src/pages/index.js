@@ -64,7 +64,7 @@ const Home = () => {
         <div className='container'>
           <div className='contentSection'>
             <div className='image'>
-              <img alt='' src='images/custom-images/ls_medium.jpg' />
+              <img alt='' src='images/custom-images/560.jpg' />
             </div>
             <div className='content'>
               <p>
@@ -81,7 +81,7 @@ const Home = () => {
         <div className='container'>
           <div className='contentSection sty2'>
             <div className='image'>
-              <img alt='' src='images/custom-images/ls_medium.jpg' />
+              <img alt='' src='images/custom-images/566.jpg' />
             </div>
             <div className='content'>
               <p>
