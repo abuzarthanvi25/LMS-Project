@@ -5,12 +5,32 @@ import AccordionDetails from '@mui/material/AccordionDetails'
 import LinearProgress from '@mui/material/LinearProgress'
 import Typography from '@mui/material/Typography'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { Skeleton } from '@mui/material'
 
-const Course = ({ courseName, progress }) => {
-  // Inline styles
+const SkeletonCourse = () => {
+  return (
+    <Accordion>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        <Skeleton width='50%' />
+      </AccordionSummary>
+      <AccordionDetails>
+        <div style={{ width: '100%', marginTop: '8px' }}>
+          <Skeleton width='50%' />
+          <LinearProgress sx={{ borderRadius: 10 }} variant='determinate' color='success' value={0} />
+        </div>
+      </AccordionDetails>
+    </Accordion>
+  )
+}
+
+const Course = ({ courseName, progress, loading }) => {
+  if (loading) {
+    return <SkeletonCourse />
+  }
+
   const accordionStyle = {
     width: '100%',
-    boxShadow: 'none', // Remove the box shadow if desired
+    boxShadow: 'none',
     padding: 0,
     border: '2px solid grey',
     marginTop: '10px',
@@ -19,7 +39,7 @@ const Course = ({ courseName, progress }) => {
 
   const progressBarContainerStyle = {
     width: '100%',
-    marginTop: '8px' // Adjust spacing as needed
+    marginTop: '8px'
   }
 
   return (
