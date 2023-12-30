@@ -1,5 +1,5 @@
 // ** MUI Imports
-import Box from '@mui/material/Box'
+import get from 'lodash/get'
 import useMediaQuery from '@mui/material/useMediaQuery'
 
 // ** Layout Imports
@@ -10,15 +10,17 @@ import VerticalLayout from 'src/@core/layouts/VerticalLayout'
 import VerticalNavItems from 'src/navigation/vertical'
 
 // ** Component Import
-import UpgradeToProButton from './components/UpgradeToProButton'
 import VerticalAppBarContent from './components/vertical/AppBarContent'
 
 // ** Hook Import
 import { useSettings } from 'src/@core/hooks/useSettings'
+import { connect } from 'react-redux'
 
-const UserLayout = ({ children }) => {
+const UserLayout = ({ children, userDetails }) => {
   // ** Hooks
   const { settings, saveSettings } = useSettings()
+
+  const ROLE = get(userDetails, 'data.role', 'Student')
 
   /**
    *  The below variable will hide the current layout menu at given screen size.
@@ -35,7 +37,7 @@ const UserLayout = ({ children }) => {
       hidden={hidden}
       settings={settings}
       saveSettings={saveSettings}
-      verticalNavItems={VerticalNavItems()} // Navigation Items
+      verticalNavItems={VerticalNavItems()[ROLE]} // Navigation Items
       verticalAppBarContent={(
         props // AppBar Content
       ) => (
@@ -52,4 +54,12 @@ const UserLayout = ({ children }) => {
   )
 }
 
-export default UserLayout
+const mapStateToProps = state => {
+  return {
+    userDetails: state.auth.userDetails,
+    profileDetails: state.profile.profileDetails,
+    rehydrated: state._persist.rehydrated
+  }
+}
+
+export default connect(mapStateToProps, null)(UserLayout)
