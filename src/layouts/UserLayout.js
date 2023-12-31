@@ -15,12 +15,19 @@ import VerticalAppBarContent from './components/vertical/AppBarContent'
 // ** Hook Import
 import { useSettings } from 'src/@core/hooks/useSettings'
 import { connect } from 'react-redux'
+import { useEffect, useState } from 'react'
 
 const UserLayout = ({ children, userDetails }) => {
   // ** Hooks
   const { settings, saveSettings } = useSettings()
-
+  const [role, setRole] = useState('')
   const ROLE = get(userDetails, 'data.role', 'Student')
+
+  useEffect(() => {
+    if (ROLE) {
+      setRole(ROLE)
+    }
+  }, [ROLE])
 
   /**
    *  The below variable will hide the current layout menu at given screen size.
@@ -37,7 +44,7 @@ const UserLayout = ({ children, userDetails }) => {
       hidden={hidden}
       settings={settings}
       saveSettings={saveSettings}
-      verticalNavItems={VerticalNavItems()[ROLE]} // Navigation Items
+      verticalNavItems={VerticalNavItems()[role]} // Navigation Items
       verticalAppBarContent={(
         props // AppBar Content
       ) => (
