@@ -1,10 +1,12 @@
 import ApiResource from '../../services/api'
+import { formDataInstance } from '../../services/api'
 import ApiConstants from '../../configs/constants'
 
 const requestHeaders = token => {
   const config = {
     headers: {
-      Authorization: `Bearer ${token}`
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'multipart/form-data'
     }
   }
 
@@ -31,7 +33,18 @@ async function register(payload, thunkAPI) {
   }
 }
 
+async function registerWithFiles(payload, thunkAPI) {
+  try {
+    const response = await formDataInstance.post(ApiConstants.signUp, payload?.body)
+
+    return response
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error)
+  }
+}
+
 export const AuthApiServices = {
   login,
-  register
+  register,
+  registerWithFiles
 }
