@@ -23,7 +23,7 @@ const navigation = () => {
       {
         title: 'Manage Students',
         icon: AccountSettings,
-        path: '/dashboard/#'
+        path: '/manage-students'
       },
       {
         sectionTitle: 'Teachers'
@@ -31,7 +31,7 @@ const navigation = () => {
       {
         title: 'Manage Teachers',
         icon: AccountSettings,
-        path: '/dashboard/#'
+        path: '/manage-teachers'
       },
       {
         sectionTitle: 'Courses'
