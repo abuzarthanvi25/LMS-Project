@@ -60,7 +60,8 @@ const AppBarContent = props => {
           </IconButton>
         ) : null}
         <Typography variant='body2'>
-          Hi There 👋🏻 {fullName}, you are logged in as {role == ROLES.admin ? 'an' : 'a'} {role} {roleMapper()}
+          Hi There 👋🏻 <span style={{ fontWeight: 'bold' }}>{fullName}</span>, you are logged in as{' '}
+          {role == ROLES.admin ? 'an' : 'a'} <span style={{ fontWeight: 'bold' }}>{role}</span> {roleMapper()}
         </Typography>
       </Box>
       <Box className='actions-right' sx={{ display: 'flex', alignItems: 'center' }}>

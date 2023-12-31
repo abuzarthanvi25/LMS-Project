@@ -231,7 +231,6 @@ const TeacherRegisterForm = ({
               id='bankAccount'
               label='Bank Account Number'
               variant='outlined'
-              type='number'
               size='small'
               {...formik.getFieldProps('bankAccount')}
               error={formik.touched.bankAccount && Boolean(formik.errors.bankAccount)}
