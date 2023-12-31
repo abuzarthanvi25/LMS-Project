@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux'
 import { getAllTeachersRequest, verifyTeacherRequest } from '../../store/reducers/adminReducer'
 import { connect } from 'react-redux'
 import { unwrapResult } from '@reduxjs/toolkit'
-import { showFaliureToast } from 'src/configs/app-toast'
+import { showFaliureToast, showSuccessToast } from 'src/configs/app-toast'
 import CustomTable from '../../@core/custom-components/custom-tables'
 import RoleDetails from 'src/@core/custom-components/role-details'
 
@@ -70,7 +70,8 @@ const ManageTeachers = ({ getAllTeachersRequest, verifyTeacherRequest, teachersL
         setLoading(true)
         verifyTeacherRequest({ token, id: details.id })
           .then(unwrapResult)
-          .then(() => {
+          .then(res => {
+            showSuccessToast(res?.data?.message)
             handleGetTeachersList()
             setLoading(false)
           })
@@ -89,7 +90,7 @@ const ManageTeachers = ({ getAllTeachersRequest, verifyTeacherRequest, teachersL
       <Box>
         <RoleDetails
           details={details}
-          open={details ? true : false}
+          open={details && !loading ? true : false}
           onClose={() => setDetails(null)}
           onApprove={() => handleApprove(details)}
           loading={loading}
