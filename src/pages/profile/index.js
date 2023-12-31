@@ -8,7 +8,7 @@ import { styled } from '@mui/material/styles'
 
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
-import { Grid, Typography, Skeleton } from '@mui/material'
+import { Grid, Typography, Skeleton, Button } from '@mui/material'
 import CourseProgress from '../../@core/custom-components/course-progress'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -16,6 +16,8 @@ import { getProfileDetailsRequest } from '../../store/reducers/profileReducer'
 import { unwrapResult } from '@reduxjs/toolkit'
 import { showFaliureToast } from 'src/configs/app-toast'
 import get from 'lodash/get'
+import PreviewImage from '../../@core/custom-components/modals/preview-image'
+import { ROLES } from 'src/configs/role-constants'
 
 const ProfileBanner = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -132,11 +134,14 @@ const ProfileDetails = ({ profileDetails, token, getProfileDetailsRequest }) => 
   // ** State
   const [imgSrc, setImgSrc] = useState('/images/avatars/3.png')
   const [loading, setLoading] = useState(false)
+  const [open, setOpen] = useState(false)
 
   const fullName = get(profileDetails, 'data.fullName', '')
   const emailAddress = get(profileDetails, 'data.emailAddress', '')
   const role = get(profileDetails, 'data.role', 'Student')
   const education = get(profileDetails, 'data.education', '')
+  const subject = get(profileDetails, 'data.subject', '')
+  const cvImage = get(profileDetails, 'data.cvImage', '')
 
   useEffect(() => {
     handleGetProfileDetails()
@@ -158,6 +163,7 @@ const ProfileDetails = ({ profileDetails, token, getProfileDetailsRequest }) => 
 
   return (
     <Card style={{ boxShadow: '10px 10px 5px 0px #EBEDEF' }}>
+      <PreviewImage open={open} src={cvImage} imageLabel='CV Image' onClose={() => setOpen(false)} />
       {loading ? (
         <SkeletonBanner>
           <Skeleton animation='wave' variant='rectangular' width='100%' height='100%' />
@@ -233,46 +239,77 @@ const ProfileDetails = ({ profileDetails, token, getProfileDetailsRequest }) => 
             )}
           </Box>
         </Grid>
-        <Grid item xs={12} sm={12} md={6} sx={{ padding: '0px 15px', marginTop: '60px' }}>
-          <Typography variant='h5' sx={{ fontWeight: 'bolder' }}>
-            Educational Details
-          </Typography>
-
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', flexWrap: 'wrap' }}>
-            <Typography variant='body' sx={{ fontWeight: 'bolder' }}>
-              Education Level
+        {role == ROLES.teacher ? (
+          <Grid item xs={12} sm={12} md={6} sx={{ padding: '0px 15px', marginTop: '60px' }}>
+            <Typography variant='h5' sx={{ fontWeight: 'bolder' }}>
+              Educational Details
             </Typography>
-            {loading ? (
-              <Skeleton animation='wave' variant='text' width={200} height={40} />
-            ) : (
+
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', flexWrap: 'wrap' }}>
               <Typography variant='body' sx={{ fontWeight: 'bolder' }}>
-                {education ?? 'Bachelors'}
+                Education Level
               </Typography>
-            )}
-          </Box>
-        </Grid>
-        <Grid item xs={12} sm={12} md={12} sx={{ padding: '0px 15px', marginTop: '60px' }}>
+              {loading ? (
+                <Skeleton animation='wave' variant='text' width={200} height={40} />
+              ) : (
+                <Typography variant='body' sx={{ fontWeight: 'bolder' }}>
+                  {education ?? 'Bachelors'}
+                </Typography>
+              )}
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', flexWrap: 'wrap' }}>
+              <Typography variant='body' sx={{ fontWeight: 'bolder' }}>
+                Suject
+              </Typography>
+              {loading ? (
+                <Skeleton animation='wave' variant='text' width={200} height={40} />
+              ) : (
+                <Typography variant='body' sx={{ fontWeight: 'bolder' }}>
+                  {subject ?? 'Maths'}
+                </Typography>
+              )}
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', flexWrap: 'wrap' }}>
+              <Typography variant='body' sx={{ fontWeight: 'bolder' }}>
+                CV Image
+              </Typography>
+              {loading ? (
+                <Skeleton animation='wave' variant='text' width={200} height={40} />
+              ) : (
+                <Button
+                  onClick={() => setOpen(true)}
+                  variant='contained'
+                  sx={{ fontWeight: 'bolder', cursor: 'pointer' }}
+                >
+                  View Image
+                </Button>
+              )}
+            </Box>
+          </Grid>
+        ) : null}
+        <Grid
+          item
+          xs={12}
+          sm={12}
+          md={role == ROLES.teacher ? 12 : 6}
+          lg={role == ROLES.teacher ? 12 : 6}
+          sx={{ padding: '0px 15px', marginTop: '60px' }}
+        >
           <Typography variant='h5' sx={{ fontWeight: 'bolder' }}>
             Your Courses
           </Typography>
 
-          <Grid container>
-            <Grid item sm={12} md={6}>
+          <Grid container spacing={3}>
+            <Grid item sm={12} md={role == ROLES.teacher ? 6 : 12} lg={role == ROLES.teacher ? 6 : 12}>
               <CourseProgress loading={loading} courseName={"Database and API's Development"} progress={30} />
             </Grid>
-          </Grid>
-          <Grid container>
-            <Grid item sm={12} md={6}>
+            <Grid item sm={12} md={role == ROLES.teacher ? 6 : 12} lg={role == ROLES.teacher ? 6 : 12}>
               <CourseProgress loading={loading} courseName={'Frontend Web Development'} progress={40} />
             </Grid>
-          </Grid>
-          <Grid container>
-            <Grid item sm={12} md={6}>
+            <Grid item sm={12} md={role == ROLES.teacher ? 6 : 12} lg={role == ROLES.teacher ? 6 : 12}>
               <CourseProgress loading={loading} courseName={'Responsive Design'} progress={70} />
             </Grid>
-          </Grid>
-          <Grid container>
-            <Grid item sm={12} md={6}>
+            <Grid item sm={12} md={role == ROLES.teacher ? 6 : 12} lg={role == ROLES.teacher ? 6 : 12}>
               <CourseProgress loading={loading} courseName={'Software Designing'} progress={100} />
             </Grid>
           </Grid>

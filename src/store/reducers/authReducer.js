@@ -26,6 +26,15 @@ export const registerUserRequest = createAsyncThunk('AuthReducer/registerUserReq
   return response
 })
 
+export const registerUserRequestWithFiles = createAsyncThunk(
+  'AuthReducer/registerUserRequest',
+  async (payload, thunkApi) => {
+    const response = await AuthApiServices.registerWithFiles(payload, thunkApi)
+
+    return response
+  }
+)
+
 const authReducer = createReducer(initialState, builder => {
   builder
 

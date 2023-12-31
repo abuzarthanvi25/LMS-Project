@@ -14,7 +14,7 @@ import { Box, Typography, Grid, MenuItem, Select, Chip, CircularProgress } from 
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { teacherRegisterInitialValues, teacherRegisterValidationSchema } from 'src/@core/utils/validations/teacher'
 import { useDispatch } from 'react-redux'
-import { registerUserRequest } from 'src/store/reducers/authReducer'
+import { registerUserRequestWithFiles } from 'src/store/reducers/authReducer'
 import { showFaliureToast, showSuccessToast } from 'src/configs/app-toast'
 
 const TeacherRegisterForm = ({
@@ -35,47 +35,32 @@ const TeacherRegisterForm = ({
     onSubmit: values => {
       const formData = new FormData()
 
-      const file = values.uploadCV
+      if (values.uploadCV) {
+        formData.append('cvImage', values.uploadCV)
+        formData.append('fullName', values.fullName)
+        formData.append('bankAccount', values.bankAccount)
+        formData.append('emailAddress', values.email)
+        formData.append('password', values.password)
+        formData.append('education', values.education)
+        formData.append('subject', values.subject)
+        formData.append('role', 'Teacher')
 
-      if (file) {
-        const reader = new FileReader()
+        setLoading(true)
 
-        reader.onloadend = () => {
-          // The result attribute contains the ArrayBuffer
-          const fileBuffer = reader.result
-
-          const fileBlob = new Blob([fileBuffer])
-          const fileName = file.name
-
-          // Append the file with its details to the FormData
-          // formData.append('cvImage', '')
-          formData.append('fullName', values.fullName)
-          formData.append('bankAccount', values.bankAccount)
-          formData.append('emailAddress', values.email)
-          formData.append('password', values.password)
-          formData.append('education', values.education)
-          formData.append('subject', values.subject)
-          formData.append('role', 'Teacher')
-
-          setLoading(true)
-
-          dispatch(registerUserRequest({ body: formData }))
-            .then(res => {
-              if (res.error) {
-                showFaliureToast(res?.payload?.response?.data?.message)
-              } else {
-                showSuccessToast(res?.message)
-                handleTeacherRegistration()
-              }
-              setLoading(false)
-            })
-            .catch(err => {
-              setLoading(false)
-              console.log(err)
-            })
-        }
-
-        reader.readAsArrayBuffer(file)
+        dispatch(registerUserRequestWithFiles({ body: formData }))
+          .then(res => {
+            if (res.error) {
+              showFaliureToast(res?.payload?.response?.data?.message)
+            } else {
+              showSuccessToast(res?.message)
+              handleTeacherRegistration()
+            }
+            setLoading(false)
+          })
+          .catch(err => {
+            setLoading(false)
+            console.log(err)
+          })
       }
     }
   })
@@ -256,9 +241,22 @@ const TeacherRegisterForm = ({
               </Typography>
             )}
             {formik.values.uploadCV && (
-              <Typography style={{ margin: '10px 0' }} variant='body2'>
-                Uploaded File: {formik.values.uploadCV.name}
-              </Typography>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignContent: 'center' }}>
+                <Typography style={{ margin: '10px 0', fontWeight: 'bold' }} variant='body2'>
+                  Uploaded File: {formik.values.uploadCV.name}
+                </Typography>
+                <Button
+                  size='small'
+                  onClick={() => {
+                    formik.setFieldValue('uploadCV', null)
+                    setPreviewImage(null)
+                  }}
+                  variant='contained'
+                  color='error'
+                >
+                  Remove
+                </Button>
+              </Box>
             )}
           </Grid>
           <Grid item xs={12}>
