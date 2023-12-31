@@ -48,7 +48,7 @@ const VerticalNavHeader = props => {
       ) : (
         <Link href='/' passHref>
           <StyledLink>
-            <Image src={LearningPointLogoSrc} height={120} width={120} alt='logo' />
+            <Image src={LearningPointLogoSrc} priority height={120} width={120} alt='logo' />
             {/* <HeaderTitle variant='h6' sx={{ ml: 3 }}>
               Learning Point
             </HeaderTitle> */}
