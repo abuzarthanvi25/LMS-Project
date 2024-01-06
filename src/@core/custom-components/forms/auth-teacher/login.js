@@ -17,6 +17,7 @@ import { loginUserRequest } from 'src/store/reducers/authReducer'
 import { showFaliureToast, showSuccessToast } from 'src/configs/app-toast'
 import { useRouter } from 'next/router'
 import { unwrapResult } from '@reduxjs/toolkit'
+import Cookies from 'js-cookie'
 
 const TeacherLoginForm = ({
   loginTitle = `Welcome to ${themeConfig.templateName}! 👋🏻`,
@@ -48,6 +49,7 @@ const TeacherLoginForm = ({
       dispatch(loginUserRequest({ body: payload }))
         .then(unwrapResult)
         .then(res => {
+          Cookies.set('isLoggedIn', 'true')
           showSuccessToast(res?.data?.message)
           router.push('/dashboard')
           setLoading(false)
