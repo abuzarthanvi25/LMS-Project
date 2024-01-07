@@ -11,23 +11,75 @@ import VerticalNavItems from 'src/navigation/vertical'
 
 // ** Component Import
 import VerticalAppBarContent from './components/vertical/AppBarContent'
+import SettingsCourse from 'mdi-material-ui/FolderPlusOutline'
 
 // ** Hook Import
 import { useSettings } from 'src/@core/hooks/useSettings'
 import { connect } from 'react-redux'
 import { useEffect, useState } from 'react'
+import { unwrapResult } from '@reduxjs/toolkit'
+import { bindActionCreators } from 'redux'
+import { getAllCoursesRequest } from '../store/reducers/courseReducer'
+import { showFaliureToast } from 'src/configs/app-toast'
+import { ROLES } from 'src/configs/role-constants'
 
-const UserLayout = ({ children, userDetails }) => {
+const UserLayout = ({ children, userDetails, getAllCoursesRequest, courseList }) => {
   // ** Hooks
   const { settings, saveSettings } = useSettings()
   const [role, setRole] = useState('')
+  const [coursesLocal, setCourseLocal] = useState([])
+
+  useEffect(() => handleGetCoursesList(), [])
+
+  useEffect(() => {
+    if (courseList) {
+      setCourseLocal(courseList)
+    }
+  }, [courseList])
+
   const ROLE = get(userDetails, 'data.role', 'Student')
+  const token = get(userDetails, 'token', null)
+
+  const handleGetCoursesList = () => {
+    try {
+      if (token) {
+        getAllCoursesRequest({ token })
+          .then(unwrapResult)
+          .then(() => setLoading(false))
+          .catch(error => {
+            showFaliureToast(error?.response?.data?.message)
+          })
+      }
+    } catch (error) {}
+  }
 
   useEffect(() => {
     if (ROLE) {
       setRole(ROLE)
     }
   }, [ROLE])
+
+  const getNavItems = () => {
+    try {
+      if (role !== ROLES.teacher) return VerticalNavItems()[role]
+
+      const arr = [
+        ...VerticalNavItems()[role],
+        {
+          sectionTitle: 'Courses'
+        },
+        ...coursesLocal.map(course => ({
+          title: course?.courseTitle,
+          icon: SettingsCourse,
+          path: `/courses/${course._id}`
+        }))
+      ]
+
+      return arr
+    } catch (error) {
+      return VerticalNavItems()[role]
+    }
+  }
 
   /**
    *  The below variable will hide the current layout menu at given screen size.
@@ -44,7 +96,7 @@ const UserLayout = ({ children, userDetails }) => {
       hidden={hidden}
       settings={settings}
       saveSettings={saveSettings}
-      verticalNavItems={VerticalNavItems()[role]} // Navigation Items
+      verticalNavItems={getNavItems()} // Navigation Items
       verticalAppBarContent={(
         props // AppBar Content
       ) => (
@@ -65,8 +117,18 @@ const mapStateToProps = state => {
   return {
     userDetails: state.auth.userDetails,
     profileDetails: state.profile.profileDetails,
+    courseList: state.courses.allCourses,
     rehydrated: state._persist.rehydrated
   }
 }
 
-export default connect(mapStateToProps, null)(UserLayout)
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+    {
+      getAllCoursesRequest
+    },
+    dispatch
+  )
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserLayout)

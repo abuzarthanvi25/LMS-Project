@@ -40,3 +40,21 @@ export const adminLoginValidationSchema = Yup.object({
   email: Yup.string().email('Invalid email address').required('Required'),
   password: Yup.string().required('Required')
 })
+
+export const addCourseInitialValues = {
+  courseTitle: '',
+  courseDescription: '',
+  price: '',
+  courseThumbnail: null,
+  material_1: null
+}
+
+export const addCourseValidationSchema = Yup.object({
+  courseTitle: Yup.string().required('Course title is required'),
+  courseDescription: Yup.string().required('Course description is required'),
+  price: Yup.number('Price must be a number')
+    .required('Course price is required')
+    .positive('Course price must be a positive number'),
+  courseThumbnail: Yup.mixed().required('Thumbnail image is required'),
+  material_1: Yup.mixed().required('At least one video per course is required')
+})

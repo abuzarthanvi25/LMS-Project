@@ -4,6 +4,7 @@ import Account from 'mdi-material-ui/AccountOutline'
 import Course from 'mdi-material-ui/FolderFileOutline'
 import CourseSettings from 'mdi-material-ui/FolderCogOutline'
 import Settings from 'mdi-material-ui/FolderSettings'
+import SettingsCourse from 'mdi-material-ui/FolderPlusOutline'
 import AccountSettings from 'mdi-material-ui/AccountCogOutline'
 
 const navigation = () => {
@@ -109,27 +110,12 @@ const navigation = () => {
         path: '/dashboard/#'
       },
       {
-        sectionTitle: 'Courses'
+        sectionTitle: 'Course Management'
       },
       {
-        title: 'Course 1',
-        icon: Course,
-        path: '/dashboard/#'
-      },
-      {
-        title: 'Course 2',
-        icon: Course,
-        path: '/dashboard/#'
-      },
-      {
-        title: 'Course 3',
-        icon: Course,
-        path: '/dashboard/#'
-      },
-      {
-        title: 'Course 4',
-        icon: Course,
-        path: '/dashboard/#'
+        title: 'Add A Course',
+        icon: SettingsCourse,
+        path: '/add-a-course'
       }
     ]
   }
