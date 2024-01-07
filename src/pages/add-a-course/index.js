@@ -59,7 +59,7 @@ const AddACourse = () => {
     onSubmit: values => {
       // Handle form submission logic here
       const formDataPayload = objectToFormData(values)
-      console.log(formDataPayload.get('thumbnailImage'))
+      console.log(formDataPayload.get('material_2'))
     }
   })
 
@@ -109,8 +109,8 @@ const AddACourse = () => {
           videoLabel={previewVideoSrc.videoTitle}
           open={previewVideoSrc.file ? true : false}
         />
-        <Box sx={{ marginY: '20px' }}>
-          <Typography variant='h3'>Upload A Course</Typography>
+        <Box sx={{ marginBottom: '20px' }}>
+          <Typography variant='h4'>Upload A Course</Typography>
         </Box>
         <form onSubmit={formik.handleSubmit}>
           <Grid container spacing={4}>
