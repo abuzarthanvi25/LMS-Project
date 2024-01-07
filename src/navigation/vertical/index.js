@@ -116,29 +116,6 @@ const navigation = () => {
         title: 'Add A Course',
         icon: SettingsCourse,
         path: '/add-a-course'
-      },
-      {
-        sectionTitle: 'Courses'
-      },
-      {
-        title: 'Course 1',
-        icon: Course,
-        path: '/dashboard/#'
-      },
-      {
-        title: 'Course 2',
-        icon: Course,
-        path: '/dashboard/#'
-      },
-      {
-        title: 'Course 3',
-        icon: Course,
-        path: '/dashboard/#'
-      },
-      {
-        title: 'Course 4',
-        icon: Course,
-        path: '/dashboard/#'
       }
     ]
   }
