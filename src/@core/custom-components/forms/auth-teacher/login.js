@@ -43,7 +43,8 @@ const TeacherLoginForm = ({
 
       const payload = {
         emailAddress: values.email,
-        password: values.password
+        password: values.password,
+        role: 'Teacher'
       }
 
       dispatch(loginUserRequest({ body: payload }))

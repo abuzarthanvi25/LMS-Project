@@ -45,10 +45,8 @@ export const addCourseInitialValues = {
   courseTitle: '',
   courseDescription: '',
   price: '',
-  thumbnailImage: null,
-  material_1: null,
-  material_2: null,
-  material_3: null
+  courseThumbnail: null,
+  material_1: null
 }
 
 export const addCourseValidationSchema = Yup.object({
@@ -57,8 +55,6 @@ export const addCourseValidationSchema = Yup.object({
   price: Yup.number('Price must be a number')
     .required('Course price is required')
     .positive('Course price must be a positive number'),
-  thumbnailImage: Yup.mixed().required('Thumbnail image is required'),
-  material_1: Yup.mixed().required('At least one video per course is required'),
-  material_2: Yup.mixed().notRequired(),
-  material_3: Yup.mixed().notRequired()
+  courseThumbnail: Yup.mixed().required('Thumbnail image is required'),
+  material_1: Yup.mixed().required('At least one video per course is required')
 })

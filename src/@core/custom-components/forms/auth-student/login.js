@@ -43,7 +43,8 @@ const StudentLoginForm = ({
 
       const payload = {
         emailAddress: values.email,
-        password: values.password
+        password: values.password,
+        role: 'Student'
       }
 
       dispatch(loginUserRequest({ body: payload }))

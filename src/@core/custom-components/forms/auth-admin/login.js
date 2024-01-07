@@ -40,7 +40,8 @@ const AdminLoginForm = ({
 
       const payload = {
         emailAddress: values.email,
-        password: values.password
+        password: values.password,
+        role: 'Admin'
       }
 
       dispatch(loginUserRequest({ body: payload }))
