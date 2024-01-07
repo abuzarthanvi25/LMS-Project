@@ -7,22 +7,19 @@ import {
   CircularProgress,
   FormControl,
   Grid,
-  IconButton,
   InputAdornment,
-  InputLabel,
   OutlinedInput,
   TextField,
   Typography
 } from '@mui/material'
 import CloudUploadIcon from '@mui/icons-material/CloudUpload'
 import { useFormik } from 'formik'
-import * as yup from 'yup'
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import TrashCanOutline from 'mdi-material-ui/TrashCanOutline'
 import PreviewImage from '../../@core/custom-components/modals/preview-image'
 import PreviewVideo from '../../@core/custom-components/modals/preview-video'
 import { objectToFormData } from 'src/@core/utils/helpers'
-import { useRef } from 'react'
+import { addCourseInitialValues, addCourseValidationSchema } from 'src/@core/utils/validations/teacher'
 
 const AddACourse = () => {
   const [loading, setLoading] = useState(false)
@@ -30,32 +27,9 @@ const AddACourse = () => {
   const [previewImageSrc, setPreviewImageSrc] = useState(null)
   const [previewVideoSrc, setPreviewVideoSrc] = useState({ file: null, videoTitle: '' })
 
-  const material1Ref = useRef(null)
-  const material2Ref = useRef(null)
-  const material3Ref = useRef(null)
-
   const formik = useFormik({
-    initialValues: {
-      courseTitle: '',
-      courseDescription: '',
-      price: '',
-      thumbnailImage: null,
-      material_1: null,
-      material_2: null,
-      material_3: null
-    },
-    validationSchema: yup.object({
-      courseTitle: yup.string().required('Course title is required'),
-      courseDescription: yup.string().required('Course description is required'),
-      price: yup
-        .number('Price must be a number')
-        .required('Course price is required')
-        .positive('Course price must be a positive number'),
-      thumbnailImage: yup.mixed().required('Thumbnail image is required'),
-      material_1: yup.mixed().required('At least one video per course is required'),
-      material_2: yup.mixed().notRequired(),
-      material_3: yup.mixed().notRequired()
-    }),
+    initialValues: addCourseInitialValues,
+    validationSchema: addCourseValidationSchema,
     onSubmit: values => {
       // Handle form submission logic here
       const formDataPayload = objectToFormData(values)
@@ -246,7 +220,6 @@ const AddACourse = () => {
                 </Box>
                 <OutlinedInput
                   id='material_1'
-                  ref={material1Ref}
                   style={{ display: 'none' }}
                   type='file'
                   inputProps={{ accept: 'video/*' }}
