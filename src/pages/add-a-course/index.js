@@ -20,12 +20,50 @@ import PreviewImage from '../../@core/custom-components/modals/preview-image'
 import PreviewVideo from '../../@core/custom-components/modals/preview-video'
 import { objectToFormData } from 'src/@core/utils/helpers'
 import { addCourseInitialValues, addCourseValidationSchema } from 'src/@core/utils/validations/teacher'
+import { uploadCourseRequest, getAllCoursesRequest } from 'src/store/reducers/courseReducer'
+import { unwrapResult } from '@reduxjs/toolkit'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { showFaliureToast, showSuccessToast } from 'src/configs/app-toast'
 
-const AddACourse = () => {
+const AddACourse = ({ token, uploadCourseRequest, getAllCoursesRequest }) => {
   const [loading, setLoading] = useState(false)
 
   const [previewImageSrc, setPreviewImageSrc] = useState(null)
   const [previewVideoSrc, setPreviewVideoSrc] = useState({ file: null, videoTitle: '' })
+
+  const handleGetCoursesList = () => {
+    try {
+      if (token) {
+        setLoading(true)
+        getAllCoursesRequest({ token })
+          .then(unwrapResult)
+          .then(() => setLoading(false))
+          .catch(error => {
+            showFaliureToast(error?.response?.data?.message)
+            setLoading(false)
+          })
+      }
+    } catch (error) {
+      setLoading(false)
+    }
+  }
+
+  const handleUploadCourse = body => {
+    setLoading(true)
+
+    uploadCourseRequest({ body, token })
+      .then(unwrapResult)
+      .then(res => {
+        showSuccessToast(res?.data?.message)
+        handleGetCoursesList()
+        setLoading(false)
+      })
+      .catch(err => {
+        showFaliureToast(err?.response?.data?.message)
+        setLoading(false)
+      })
+  }
 
   const formik = useFormik({
     initialValues: addCourseInitialValues,
@@ -33,7 +71,8 @@ const AddACourse = () => {
     onSubmit: values => {
       // Handle form submission logic here
       const formDataPayload = objectToFormData(values)
-      console.log(formDataPayload.get('material_2'))
+
+      // handleUploadCourse(formDataPayload, token);
     }
   })
 
@@ -352,4 +391,20 @@ const AddACourse = () => {
   )
 }
 
-export default AddACourse
+const mapStateToProps = state => {
+  return {
+    token: state.auth.userDetails?.token
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+    {
+      uploadCourseRequest,
+      getAllCoursesRequest
+    },
+    dispatch
+  )
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddACourse)

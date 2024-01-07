@@ -4,7 +4,9 @@ const CONSTANT = {
   getProfile: '/getUserProfile',
   getAllStudents: '/getAllStudent',
   getAllTeachers: '/getAllTeacher',
-  verifyTeacher: '/verifyTeacher'
+  verifyTeacher: '/verifyTeacher',
+  uploadCourse: '/uploadCourse',
+  getAllCourses: '/getAllCourses'
 }
 
 export default CONSTANT
