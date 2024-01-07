@@ -14,6 +14,7 @@ const ManageTeachers = ({ getAllTeachersRequest, verifyTeacherRequest, teachersL
 
   useEffect(() => {
     handleGetTeachersList()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const columns = [
