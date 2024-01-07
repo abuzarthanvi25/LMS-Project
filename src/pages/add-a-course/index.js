@@ -50,19 +50,24 @@ const AddACourse = ({ token, uploadCourseRequest, getAllCoursesRequest }) => {
   }
 
   const handleUploadCourse = body => {
-    setLoading(true)
+    try {
+      if (!token) return
+      setLoading(true)
 
-    uploadCourseRequest({ body, token })
-      .then(unwrapResult)
-      .then(res => {
-        showSuccessToast(res?.data?.message)
-        handleGetCoursesList()
-        setLoading(false)
-      })
-      .catch(err => {
-        showFaliureToast(err?.response?.data?.message)
-        setLoading(false)
-      })
+      uploadCourseRequest({ body, token })
+        .then(unwrapResult)
+        .then(res => {
+          showSuccessToast(res?.data?.message)
+          handleGetCoursesList()
+          setLoading(false)
+        })
+        .catch(err => {
+          showFaliureToast(err?.response?.data?.message)
+          setLoading(false)
+        })
+    } catch (error) {
+      setLoading(false)
+    }
   }
 
   const formik = useFormik({
@@ -264,7 +269,6 @@ const AddACourse = ({ token, uploadCourseRequest, getAllCoursesRequest }) => {
                   inputProps={{ accept: 'video/*' }}
                   onChange={event => {
                     formik.setFieldValue('material_1', event.target.files[0])
-                    console.log(event.target.files)
                   }}
                 />
                 {formik.touched.material_1 && formik.errors.material_1 && (
