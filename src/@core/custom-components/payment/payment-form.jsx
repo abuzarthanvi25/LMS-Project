@@ -7,8 +7,7 @@ import { areStepsCompleted, getActiveIndex, handleBack, handleNext } from 'src/@
 import CardDetails from './card-details'
 import PaymentSummary from './payment-summary'
 
-const DetailsForm = ({ details, onClose }) => {
-
+const DetailsForm = ({ details, onClose, handleGetAllCourses }) => {
   const [steps, setSteps] = useState([
     {
       title: 'Card Details',
@@ -38,7 +37,7 @@ const DetailsForm = ({ details, onClose }) => {
     if (!areStepsCompleted(steps)) {
       switch (currentStep) {
         case 0: return <><CardDetails handleNextStep={handleNextStep} cardDetails={cardDetails} setCardDetails={setCardDetails} /></>
-        case 1: return <><PaymentSummary onClose={onClose} handleNextStep={handleNextStep} cardDetails={cardDetails} details={details} /></>
+        case 1: return <><PaymentSummary handleGetAllCourses={handleGetAllCourses} onClose={onClose} handleNextStep={handleNextStep} cardDetails={cardDetails} details={details} /></>
         default: return null
       }
     }

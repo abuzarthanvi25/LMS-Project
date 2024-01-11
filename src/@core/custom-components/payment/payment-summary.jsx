@@ -1,12 +1,17 @@
 import { Box, Grid, Typography, Button, CircularProgress } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { coursePaymentRequest } from "../../../store/reducers/courseReducer"
 import { unwrapResult } from '@reduxjs/toolkit';
 import { showFaliureToast, showSuccessToast } from 'src/configs/app-toast';
 
-const PaymentSummary = ({ details, cardDetails, token, coursePaymentRequest, handleNextStep, onClose }) => {
+const PaymentSummary = ({ details, cardDetails, token, coursePaymentRequest, handleNextStep, onClose, handleGetAllCourses }) => {
+  console.log(handleGetAllCourses)
+
+  useEffect(() => {
+    handleGetAllCourses()
+  }, [])
 
   const [loading, setLoading] = useState(false);
 
@@ -29,6 +34,7 @@ const PaymentSummary = ({ details, cardDetails, token, coursePaymentRequest, han
           coursePaymentRequest({ token, body: coursePaymentBody })
             .then(unwrapResult)
             .then((res) => {
+              handleGetAllCourses();
               setLoading(false)
               handleNextStep()
               showSuccessToast(res?.data?.message)

@@ -39,7 +39,9 @@ const Dashboard = ({ userDetails, courseList }) => {
             showFaliureToast(error?.response?.data?.message)
           })
       }
-    } catch (error) { }
+    } catch (error) { 
+      console.log(error)
+    }
   }
 
   const handleEnrollStudent = (courseDetails) => {
@@ -65,7 +67,7 @@ const Dashboard = ({ userDetails, courseList }) => {
   return (
     <Box sx={{ padding: '20px' }}>
       <CustomModal open={courseToPayDetails ? true : false} onClose={() => setCourseToPayDetails(null)}>
-        <PaymentForm onClose={() => setCourseToPayDetails(null)} details={courseToPayDetails} />
+        <PaymentForm handleGetAllCourses={handleGetAllCourses} onClose={() => setCourseToPayDetails(null)} details={courseToPayDetails} />
       </CustomModal>
       {handleRenderDashboardContent(Role)}
     </Box>
