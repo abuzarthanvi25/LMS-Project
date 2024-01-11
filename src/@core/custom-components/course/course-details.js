@@ -17,16 +17,18 @@ const CourseDetails = ({ courseList, courseDetails, id }) => {
               {courseDetails?.courseTitle}
             </Typography>
           </Box>
-          <Box sx={{ padding: '10px', backgroundColor: theme.palette.primary.dark, borderRadius: '15px' }}>
+          <Box sx={{ padding: '10px', backgroundColor: theme.palette.grey[600], borderRadius: '10px' }}>
             <Typography variant='body' style={{ fontSize: '0.9rem', lineHeight: '2px' }} fontWeight={'500'}>
               {courseDetails?.courseDescription}
             </Typography>
           </Box>
         </Grid>
-        <Grid item md={4}>
+        <Grid item md={4} lg={4} xs={12} sm={12}>
           <CourseBanner />
+          <Box style={{maxHeight:'55vh', overflowY: 'auto', padding:'5px', width:'100%', backgroundColor:theme.palette.grey[500], borderRadius:'10px'}}>
           {!!courseList.length &&
             courseList.map((course, index) => <CourseCardSmall id={id} key={index} course={course} />)}
+          </Box>
         </Grid>
       </Grid>
     </Box>

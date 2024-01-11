@@ -36,7 +36,18 @@ async function getAllCourses(payload, thunkAPI) {
   }
 }
 
+async function coursePayment(payload, thunkAPI) {
+  try {
+    const response = await ApiResource.post(ApiConstants.coursePayment, payload?.body, requestHeaders(payload.token))
+
+    return response
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error)
+  }
+}
+
 export const CourseApiServices = {
   uploadCourse,
-  getAllCourses
+  getAllCourses,
+  coursePayment
 }
