@@ -1,7 +1,7 @@
 import Modal from '@mui/material/Modal'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
-import { CardHeader } from '@mui/material'
+import { Typography } from '@mui/material'
 
 const PaymentModal = ({ open = () => {}, onClose = () => {}, heading, children }) => {
   return (
@@ -17,7 +17,11 @@ const PaymentModal = ({ open = () => {}, onClose = () => {}, heading, children }
           overflow: 'visible'
         }}
       >
-        <CardHeader>{heading}</CardHeader>
+        <CardContent>
+          <Typography variant='h5' fontWeight={'bold'} textAlign={'center'}>
+            {heading}
+          </Typography>
+        </CardContent>
         <CardContent>{children}</CardContent>
       </Card>
     </Modal>
