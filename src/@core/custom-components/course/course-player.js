@@ -1,6 +1,8 @@
+import { useTheme } from '@emotion/react'
 import { Box, Skeleton } from '@mui/material'
 
 const CoursePlayer = ({ src, posterImg }) => {
+  const theme = useTheme()
   return (
     <>
       {src ? (
@@ -8,7 +10,7 @@ const CoursePlayer = ({ src, posterImg }) => {
           <video
             poster={posterImg}
             key={src}
-            style={{ borderRadius: '20px', objectFit: 'cover', maxWidth: '100%', height: 'auto', width: '100%' }}
+            style={{ borderRadius: '20px', objectFit: 'cover', maxWidth: '100%', height: '400px', width: '100%' }}
             width='auto'
             controls
           >

@@ -1,8 +1,9 @@
 import { Typography, Box, Grid } from '@mui/material'
 import { useRouter } from 'next/router'
 import { useTheme } from '@mui/material/styles'
+import { truncateString } from 'src/@core/utils/helpers'
 
-const CourseCardSmall = ({ course, id }) => {
+const CourseCardSmall = ({ course, id = '' }) => {
   const router = useRouter()
 
   const handleDetails = text => {
@@ -18,7 +19,7 @@ const CourseCardSmall = ({ course, id }) => {
   const theme = useTheme()
 
   const activeStyles = {
-    backgroundColor: theme.palette.grey[300],
+    backgroundColor: theme.palette.grey[600],
     borderRadius: '20px'
   }
 
@@ -30,7 +31,7 @@ const CourseCardSmall = ({ course, id }) => {
       sx={{ marginY: '10px', padding: '10px', cursor: 'pointer' }}
     >
       <Grid item md={6}>
-        <Box style={{ height: '120px' }}>
+        <Box style={{ height: '90px' }}>
           <img
             style={{ borderRadius: '10px', objectFit: 'cover', maxWidth: '100%', height: '100%', width: '100%' }}
             src={course?.courseThumbnail}
@@ -44,7 +45,7 @@ const CourseCardSmall = ({ course, id }) => {
         </Typography>
         <Box>
           <Typography style={{ fontWeight: '600' }} variant='caption'>
-            {handleDetails(course?.courseDescription)}
+            {truncateString(course?.courseDescription, 20)}
           </Typography>
         </Box>
       </Grid>

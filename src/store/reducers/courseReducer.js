@@ -19,6 +19,12 @@ export const uploadCourseRequest = createAsyncThunk('CourseReducer/uploadCourseR
   return response
 })
 
+export const coursePaymentRequest = createAsyncThunk('CourseReducer/coursePaymentRequest', async (payload, thunkApi) => {
+  const response = await CourseApiServices.coursePayment(payload, thunkApi)
+
+  return response
+})
+
 export const getAllCoursesRequest = createAsyncThunk(
   'CourseReducer/getAllCoursesRequest',
   async (payload, thunkApi) => {
