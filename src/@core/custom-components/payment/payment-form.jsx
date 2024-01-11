@@ -1,4 +1,4 @@
-import { Alert, Box, Button } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import React, { useState } from 'react'
 import CustomStepper from './stepper'
 import DetailsIcon from '@mui/icons-material/ListOutlined'
@@ -7,7 +7,7 @@ import { areStepsCompleted, getActiveIndex, handleBack, handleNext } from 'src/@
 import CardDetails from './card-details'
 import PaymentSummary from './payment-summary'
 
-const DetailsForm = ({ details, onClose, handleGetAllCourses }) => {
+const PaymentForm = ({ details, onClose, handleGetAllCourses }) => {
   const [steps, setSteps] = useState([
     {
       title: 'Card Details',
@@ -22,45 +22,56 @@ const DetailsForm = ({ details, onClose, handleGetAllCourses }) => {
       icon: () => <DetailsIcon />
     }
   ])
+
   const [cardDetails, setCardDetails] = useState({
     name: '',
     cardNumber: '',
     expiry: '',
-    cvc: '',
-  });
+    cvc: ''
+  })
 
-  const handleNextStep = () => handleNext(steps, setSteps);
-  const handleBackStep = () => handleBack(steps, setSteps);
+  const handleNextStep = () => handleNext(steps, setSteps)
+  const handleBackStep = () => handleBack(steps, setSteps)
 
   const handleRenderSection = () => {
     const currentStep = getActiveIndex(steps)
-    if (!areStepsCompleted(steps)) {
-      switch (currentStep) {
-        case 0: return <><CardDetails handleNextStep={handleNextStep} cardDetails={cardDetails} setCardDetails={setCardDetails} /></>
-        case 1: return <><PaymentSummary handleGetAllCourses={handleGetAllCourses} onClose={onClose} handleNextStep={handleNextStep} cardDetails={cardDetails} details={details} /></>
-        default: return null
-      }
+    switch (currentStep) {
+      case 0:
+        return (
+          <>
+            <CardDetails handleNextStep={handleNextStep} cardDetails={cardDetails} setCardDetails={setCardDetails} />
+          </>
+        )
+      case 1:
+        return (
+          <>
+            <PaymentSummary
+              onClose={onClose}
+              handleGetAllCourses={handleGetAllCourses}
+              handleNextStep={handleNextStep}
+              cardDetails={cardDetails}
+              details={details}
+            />
+          </>
+        )
+      default:
+        return null
     }
-
-    return <>
-      <Box sx={{marginY: '20px'}}>
-        <Alert variant="filled" severity="success">
-          You are now enrolled on the course: {details?.courseTitle}
-        </Alert>
-      </Box>
-    </>
   }
 
   return (
     <Box>
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Button onClick={handleBackStep} >Back</Button>
-        <Button onClick={handleNextStep} >Next</Button>
+        <Button disabled={getActiveIndex(steps) == 0 || areStepsCompleted(steps)} onClick={handleBackStep}>
+          Back
+        </Button>
       </Box>
-      <CustomStepper steps={steps} />
+      <Box sx={{ marginBottom: '10px' }}>
+        <CustomStepper steps={steps} />
+      </Box>
       {handleRenderSection()}
     </Box>
   )
 }
 
-export default DetailsForm
+export default PaymentForm

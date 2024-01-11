@@ -6,28 +6,29 @@ import { useEffect } from 'react'
 import { get } from 'lodash'
 import { ROLES } from 'src/configs/role-constants'
 import { getAllCoursesRequest } from 'src/store/reducers/courseReducer'
-import { unwrapResult } from '@reduxjs/toolkit'
+import { bindActionCreators, unwrapResult } from '@reduxjs/toolkit'
 import { showFaliureToast } from 'src/configs/app-toast'
-import CustomModal from "src/@core/custom-components/modals/custom-modal"
+import CustomModal from 'src/@core/custom-components/modals/custom-modal'
 import PaymentForm from 'src/@core/custom-components/payment/payment-form'
 
-const Dashboard = ({ userDetails, courseList }) => {
-  const Role = get(userDetails, 'data.role', '');
-  const token = get(userDetails, 'token', null);
+const Dashboard = ({ userDetails, courseList, getAllCoursesRequest }) => {
+  const Role = get(userDetails, 'data.role', '')
+  const token = get(userDetails, 'token', null)
 
-  const [courseListLocal, setCourseListLocal] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [courseListLocal, setCourseListLocal] = useState([])
+  const [loading, setLoading] = useState(false)
   const [courseToPayDetails, setCourseToPayDetails] = useState(null)
 
   useEffect(() => {
     if (!!courseList.length) {
-      setCourseListLocal(courseList);
+      setCourseListLocal(courseList)
     }
   }, [courseList])
 
   useEffect(() => {
-    handleGetAllCourses();
-  }, [Role])
+    handleGetAllCourses()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const handleGetAllCourses = () => {
     try {
@@ -39,22 +40,19 @@ const Dashboard = ({ userDetails, courseList }) => {
             showFaliureToast(error?.response?.data?.message)
           })
       }
-    } catch (error) { 
+    } catch (error) {
       console.log(error)
     }
   }
 
-  const handleEnrollStudent = (courseDetails) => {
+  const handleEnrollStudent = courseDetails => {
     setCourseToPayDetails(courseDetails)
   }
-
 
   const handleRenderDashboardContent = (role = '') => {
     switch (role) {
       case ROLES.student:
-        return (
-          <CourseCardList handleEnroll={handleEnrollStudent} courseList={courseListLocal} loading={loading} />
-        )
+        return <CourseCardList handleEnroll={handleEnrollStudent} courseList={courseListLocal} loading={loading} />
       case ROLES.teacher:
         return <></>
       case ROLES.admin:
@@ -66,8 +64,16 @@ const Dashboard = ({ userDetails, courseList }) => {
 
   return (
     <Box sx={{ padding: '20px' }}>
-      <CustomModal open={courseToPayDetails ? true : false} onClose={() => setCourseToPayDetails(null)}>
-        <PaymentForm handleGetAllCourses={handleGetAllCourses} onClose={() => setCourseToPayDetails(null)} details={courseToPayDetails} />
+      <CustomModal
+        heading={'Course Payment'}
+        open={courseToPayDetails ? true : false}
+        onClose={() => setCourseToPayDetails(null)}
+      >
+        <PaymentForm
+          handleGetAllCourses={handleGetAllCourses}
+          onClose={() => setCourseToPayDetails(null)}
+          details={courseToPayDetails}
+        />
       </CustomModal>
       {handleRenderDashboardContent(Role)}
     </Box>
@@ -81,4 +87,13 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps, null)(Dashboard)
+const mapDispatchToProps = dispatch => {
+  return bindActionCreators(
+    {
+      getAllCoursesRequest
+    },
+    dispatch
+  )
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

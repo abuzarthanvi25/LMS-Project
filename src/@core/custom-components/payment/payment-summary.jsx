@@ -1,26 +1,31 @@
 import { Box, Grid, Typography, Button, CircularProgress } from '@mui/material'
-import React, { useEffect, useState } from 'react'
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { coursePaymentRequest } from "../../../store/reducers/courseReducer"
-import { unwrapResult } from '@reduxjs/toolkit';
-import { showFaliureToast, showSuccessToast } from 'src/configs/app-toast';
+import React, { useState } from 'react'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { coursePaymentRequest, getAllCoursesRequest } from '../../../store/reducers/courseReducer'
+import { unwrapResult } from '@reduxjs/toolkit'
+import { showFaliureToast, showSuccessToast } from 'src/configs/app-toast'
+import { get } from 'lodash'
 
-const PaymentSummary = ({ details, cardDetails, token, coursePaymentRequest, handleNextStep, onClose, handleGetAllCourses }) => {
-  console.log(handleGetAllCourses)
+const PaymentSummary = ({
+  details,
+  cardDetails,
+  coursePaymentRequest,
+  handleNextStep,
+  onClose,
+  handleGetAllCourses,
+  userDetails
+}) => {
+  const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    handleGetAllCourses()
-  }, [])
-
-  const [loading, setLoading] = useState(false);
+  const token = get(userDetails, 'token', null)
 
   const handlePayment = () => {
     try {
       if (token) {
         setLoading(true)
 
-        const [MM, YYYY] = cardDetails?.expiry.split("/");
+        const [MM, YYYY] = cardDetails?.expiry.split('/')
 
         if (MM && YYYY) {
           const coursePaymentBody = {
@@ -33,8 +38,8 @@ const PaymentSummary = ({ details, cardDetails, token, coursePaymentRequest, han
 
           coursePaymentRequest({ token, body: coursePaymentBody })
             .then(unwrapResult)
-            .then((res) => {
-              handleGetAllCourses();
+            .then(res => {
+              handleGetAllCourses()
               setLoading(false)
               handleNextStep()
               showSuccessToast(res?.data?.message)
@@ -45,17 +50,17 @@ const PaymentSummary = ({ details, cardDetails, token, coursePaymentRequest, han
               setLoading(false)
             })
         }
-
       }
     } catch (error) {
       setLoading(false)
     }
-
   }
 
   return (
     <Box>
-      <Typography variant='h6' sx={{ textAlign: 'center', marginY: '10px', fontWeight: 'bolder' }}>Your Current Payment Summary</Typography>
+      <Typography variant='h6' sx={{ textAlign: 'center', marginY: '10px', fontWeight: 'bolder' }}>
+        Your Current Payment Summary
+      </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Grid container>
@@ -66,21 +71,29 @@ const PaymentSummary = ({ details, cardDetails, token, coursePaymentRequest, han
             </Grid>
             <Grid item xs={12} sm={12} md={6}>
               <Box sx={{ marginY: '8px' }}>
-                <Typography variant='body' style={{ fontWeight: 'bold', fontSize: '1rem' }}>Course Title :</Typography>
+                <Typography variant='body' style={{ fontWeight: 'bold', fontSize: '1rem' }}>
+                  Course Title :
+                </Typography>
                 <Typography style={{ fontWeight: '500', fontSize: '0.7rem' }}>{details?.courseTitle}</Typography>
               </Box>
               <Box sx={{ marginY: '8px' }}>
-                <Typography variant='body' style={{ fontWeight: 'bold', fontSize: '1rem' }}>Course Description :</Typography>
+                <Typography variant='body' style={{ fontWeight: 'bold', fontSize: '1rem' }}>
+                  Course Description :
+                </Typography>
                 <Typography style={{ fontWeight: '500', fontSize: '0.7rem' }}>{details?.courseDescription}</Typography>
               </Box>
             </Grid>
           </Grid>
         </Grid>
         <Grid item md={12}>
-          <Typography variant='h5' sx={{ textAlign: 'center', fontWeight: '800' }}>Subtotal: ${details?.price}</Typography>
+          <Typography variant='h5' sx={{ textAlign: 'center', fontWeight: '800' }}>
+            Subtotal: ${details?.price}
+          </Typography>
         </Grid>
         <Grid sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }} item md={12}>
-          <Button sx={{minWidth: '160px'}} onClick={handlePayment} variant='contained'>{loading ? <CircularProgress style={{color: '#fff'}} size={20} /> : 'Confirm Payment'}</Button>
+          <Button sx={{ minWidth: '160px' }} onClick={handlePayment} variant='contained'>
+            {loading ? <CircularProgress style={{ color: '#fff' }} size={20} /> : 'Confirm Payment'}
+          </Button>
         </Grid>
       </Grid>
     </Box>
@@ -89,14 +102,14 @@ const PaymentSummary = ({ details, cardDetails, token, coursePaymentRequest, han
 
 const mapStateToProps = state => {
   return {
-    token: state.auth.userDetails?.token
+    userDetails: state.auth.userDetails
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      coursePaymentRequest,
+      coursePaymentRequest
     },
     dispatch
   )

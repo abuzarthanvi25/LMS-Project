@@ -1,16 +1,16 @@
-import * as React from 'react';
-import { styled } from '@mui/material/styles';
-import Stack from '@mui/material/Stack';
-import Stepper from '@mui/material/Stepper';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import SettingsIcon from '@mui/icons-material/Settings';
-import GroupAddIcon from '@mui/icons-material/GroupAdd';
-import VideoLabelIcon from '@mui/icons-material/VideoLabel';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
-import { getActiveIndex } from '../../utils/helpers';
-import { Typography } from '@mui/material';
+import * as React from 'react'
+import { styled } from '@mui/material/styles'
+import Stack from '@mui/material/Stack'
+import Stepper from '@mui/material/Stepper'
+import Step from '@mui/material/Step'
+import StepLabel from '@mui/material/StepLabel'
+import SettingsIcon from '@mui/icons-material/Settings'
+import GroupAddIcon from '@mui/icons-material/GroupAdd'
+import VideoLabelIcon from '@mui/icons-material/VideoLabel'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector'
+import { getActiveIndex } from '../../utils/helpers'
+import { Typography } from '@mui/material'
 
 const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
   [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -32,7 +32,7 @@ const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey[800] : '#eaeaf0',
     borderRadius: 1
   }
-}));
+}))
 
 const ColorlibStepIconRoot = styled('div')(({ theme, ownerState }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? theme.palette.grey[700] : '#ccc',
@@ -45,17 +45,17 @@ const ColorlibStepIconRoot = styled('div')(({ theme, ownerState }) => ({
   justifyContent: 'center',
   alignItems: 'center',
   ...(ownerState.active && {
-     backgroundColor: theme.palette.primary.main,
+    backgroundColor: theme.palette.primary.main,
     boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)'
   }),
   ...(ownerState.completed && {
     backgroundColor: theme.palette.success.main,
     boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)'
   })
-}));
+}))
 
 function ColorlibStepIcon({ active, completed, Icon }) {
-  return <ColorlibStepIconRoot ownerState={{ completed, active }}>{Icon()}</ColorlibStepIconRoot>;
+  return <ColorlibStepIconRoot ownerState={{ completed, active }}>{Icon()}</ColorlibStepIconRoot>
 }
 
 const stepsLocal = [
@@ -77,7 +77,7 @@ const stepsLocal = [
     completed: false,
     icon: () => <VideoLabelIcon />
   }
-];
+]
 
 export default function CustomStepper({ steps = stepsLocal }) {
   return (
@@ -94,11 +94,11 @@ export default function CustomStepper({ steps = stepsLocal }) {
                 })
               }
             >
-              <Typography variant='caption' >{label.title}</Typography>
+              <Typography variant='caption'>{label.title}</Typography>
             </StepLabel>
           </Step>
         ))}
       </Stepper>
     </Stack>
-  );
+  )
 }
