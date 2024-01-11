@@ -39,11 +39,11 @@ const PaymentSummary = ({
           coursePaymentRequest({ token, body: coursePaymentBody })
             .then(unwrapResult)
             .then(res => {
+              handleNextStep()
               handleGetAllCourses()
               setLoading(false)
-              handleNextStep()
               showSuccessToast(res?.data?.message)
-              setTimeout(() => onClose(), 800)
+              onClose()
             })
             .catch(error => {
               showFaliureToast(error?.response?.data?.message)

@@ -34,7 +34,8 @@ const CardDetails = ({ setCardDetails, cardDetails, handleNextStep }) => {
         .matches(/^[A-Za-z]+(?:[ '-][A-Za-z]+)*$/, 'Invalid Name')
         .required('Name is required'),
       cardNumber: Yup.string()
-        .min(16)
+        .min(16, 'Card number must be 16 digits')
+        .max(16, 'Card number must be 16 digits')
         .matches(/^\d{16}$/, 'Must be 16 digits')
         .required('Card number is required'),
       expiry: Yup.string().required('Expiry date is required'),
