@@ -61,7 +61,7 @@ const UserLayout = ({ children, userDetails, getAllCoursesRequest, courseList })
 
   const getNavItems = () => {
     try {
-      if (role !== ROLES.teacher) return VerticalNavItems()[role]
+      if (role !== ROLES.student) return VerticalNavItems()[role]
 
       const arr = [
         ...VerticalNavItems()[role],
