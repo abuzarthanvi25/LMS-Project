@@ -3,13 +3,28 @@ import { useEffect, useState } from 'react'
 import { connect } from 'react-redux'
 import { Card, CardContent } from '@mui/material'
 import CourseDetailsComponent from 'src/@core/custom-components/course/course-details'
+import { get } from 'lodash'
+import { ROLES } from 'src/configs/role-constants'
 
-const CourseDetails = ({ courseList }) => {
+const CourseDetails = ({ courseList, allCoursesAdmin, userDetails }) => {
   const router = useRouter()
   const [courseDetails, setCourseDetails] = useState(null)
-  const id = router?.query?.id
+  const id = router?.query?.id;
+  const Role = get(userDetails, 'data.role', '');
 
-  useEffect(() => handleGetCourseDetails(courseList), [id])
+  const handleList = () => {
+    if(!Role) return courseList
+
+    if(Role == ROLES.student){
+      return courseList
+    }
+
+    if(Role == ROLES.admin){
+      return allCoursesAdmin
+    }
+  }
+
+  useEffect(() => handleGetCourseDetails(handleList()), [id])
 
   const handleGetCourseDetails = courseList => {
     if (!id || !courseList) return null
@@ -25,7 +40,7 @@ const CourseDetails = ({ courseList }) => {
   return (
     <Card>
       <CardContent>
-        <CourseDetailsComponent id={id} courseDetails={courseDetails} courseList={courseList} />
+        <CourseDetailsComponent id={id} courseDetails={courseDetails} courseList={handleList()} />
       </CardContent>
     </Card>
   )
@@ -33,7 +48,9 @@ const CourseDetails = ({ courseList }) => {
 
 const mapStateToProps = state => {
   return {
-    courseList: state.courses.allCourses
+    courseList: state.courses.allCourses,
+    allCoursesAdmin: state.courses.allCoursesAdmin,
+    userDetails: state.auth.userDetails,
   }
 }
 

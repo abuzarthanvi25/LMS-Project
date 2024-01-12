@@ -40,7 +40,7 @@ const navigation = () => {
       {
         title: 'Manage Courses',
         icon: CourseSettings,
-        path: '/dashboard/#'
+        path: '/manage-courses'
       }
     ],
     Student: [
@@ -60,29 +60,6 @@ const navigation = () => {
         icon: Account,
         path: '/profile'
       },
-      {
-        sectionTitle: 'Courses'
-      },
-      {
-        title: 'Course 1',
-        icon: Course,
-        path: '/dashboard/#'
-      },
-      {
-        title: 'Course 2',
-        icon: Course,
-        path: '/dashboard/#'
-      },
-      {
-        title: 'Course 3',
-        icon: Course,
-        path: '/dashboard/#'
-      },
-      {
-        title: 'Course 4',
-        icon: Course,
-        path: '/dashboard/#'
-      }
     ],
     Teacher: [
       {
@@ -100,14 +77,6 @@ const navigation = () => {
         title: 'My Profile',
         icon: Account,
         path: '/profile'
-      },
-      {
-        sectionTitle: 'Courses Management'
-      },
-      {
-        title: 'Manage Courses',
-        icon: Settings,
-        path: '/dashboard/#'
       },
       {
         sectionTitle: 'Course Management'

@@ -25,7 +25,7 @@ const CourseDetails = ({ courseList, courseDetails, id }) => {
         </Grid>
         <Grid item md={4} lg={4} xs={12} sm={12}>
           <CourseBanner />
-          <Box style={{maxHeight:'55vh', overflowY: 'auto', padding:'5px', width:'100%', backgroundColor:theme.palette.grey[500], borderRadius:'10px'}}>
+          <Box style={{maxHeight:'58vh', overflowY: 'auto', padding:'5px', width:'100%', backgroundColor:theme.palette.grey[500], borderRadius:'10px'}}>
           {!!courseList.length &&
             courseList.map((course, index) => <CourseCardSmall id={id} key={index} course={course} />)}
           </Box>

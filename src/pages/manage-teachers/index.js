@@ -102,18 +102,21 @@ const ManageTeachers = ({ getAllTeachersRequest, verifyTeacherRequest, teachersL
           </Grid>
           <Grid item sm={12} xs={12} md={12} lg={12} xl={12}>
             <CustomTable
-              onClickRow={row =>
-                setDetails({
-                  id: row._id,
-                  fullName: row.fullName,
-                  emailAddress: row.emailAddress,
-                  role: row.role,
-                  education: row.education,
-                  subject: row.subject,
-                  isVerified: row.isVerified,
-                  createdAt: new Date(row.createdAt).toDateString(),
-                  updatedAt: new Date(row.updatedAt).toDateString()
-                })
+              onClickRow={row => {
+                if(!row?.isVerified){
+                  setDetails({
+                    id: row._id,
+                    fullName: row.fullName,
+                    emailAddress: row.emailAddress,
+                    role: row.role,
+                    education: row.education,
+                    subject: row.subject,
+                    isVerified: row.isVerified,
+                    createdAt: new Date(row.createdAt).toDateString(),
+                    updatedAt: new Date(row.updatedAt).toDateString()
+                  })
+                }
+              }
               }
               columns={columns}
               isLoading={loading}

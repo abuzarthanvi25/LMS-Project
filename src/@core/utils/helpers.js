@@ -95,3 +95,11 @@ export function handleBack(steps, setActiveStep) {
     setActiveStep(copySteps)
   }
 }
+
+export function camelCaseToTitleCase(inputString) {
+  // Add a space before capital letters and then convert to title case
+  const titleCaseString = inputString.replace(/([A-Z])/g, ' $1');
+
+  // Convert the first character to uppercase and trim any leading spaces
+  return titleCaseString.charAt(0).toUpperCase() + titleCaseString.slice(1).trim();
+}

@@ -10,7 +10,8 @@ const loadingStates = {
 const initialState = {
   error: null,
   loading: loadingStates.idle,
-  allCourses: []
+  allCourses: [],
+  allCoursesAdmin: []
 }
 
 export const uploadCourseRequest = createAsyncThunk('CourseReducer/uploadCourseRequest', async (payload, thunkApi) => {
@@ -34,6 +35,12 @@ export const getAllCoursesRequest = createAsyncThunk(
   }
 )
 
+export const getAllCoursesAdminRequest = createAsyncThunk('CourseReducer/getAdminStatisticsRequest', async (payload, thunkApi) => {
+  const response = await CourseApiServices.getAllCoursesAdmin(payload, thunkApi)
+
+  return response
+})
+
 const CourseReducer = createReducer(initialState, builder => {
   builder
 
@@ -51,6 +58,22 @@ const CourseReducer = createReducer(initialState, builder => {
       state.error = action.payload?.response?.data
       state.loading = loadingStates.idle
       state.allCourses = null
+    })
+
+    //NOTE - Get Courses cases
+    .addCase(getAllCoursesAdminRequest.pending, state => {
+      state.error = null
+      state.loading = loadingStates.pending
+    })
+    .addCase(getAllCoursesAdminRequest.fulfilled, (state, action) => {
+      state.error = null
+      state.loading = loadingStates.idle
+      state.allCoursesAdmin = [...action.payload.data?.data]
+    })
+    .addCase(getAllCoursesAdminRequest.rejected, (state, action) => {
+      state.error = action.payload?.response?.data
+      state.loading = loadingStates.idle
+      state.allCoursesAdmin = null
     })
 
     //NOTE - Logout case
