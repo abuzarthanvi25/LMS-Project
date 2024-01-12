@@ -3,7 +3,7 @@ import { useTheme } from '@mui/material/styles'
 import { useState } from 'react'
 import { truncateString } from 'src/@core/utils/helpers'
 
-const CourseCard = ({ courseDetails, handleEnroll = () => {} }) => {
+const CourseCard = ({ courseDetails, handleAction = () => {}, actionTitle }) => {
   const theme = useTheme()
 
   const [isTooltipOpen, setTooltipOpen] = useState(false);
@@ -17,7 +17,7 @@ const CourseCard = ({ courseDetails, handleEnroll = () => {} }) => {
   };
 
   const handleEnrollStudent = () => {
-    handleEnroll(courseDetails)
+    handleAction(courseDetails)
   }
 
   return (
@@ -70,7 +70,7 @@ const CourseCard = ({ courseDetails, handleEnroll = () => {} }) => {
 
         <Box style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
           <Button onClick={handleEnrollStudent} style={{ padding: '10px 25px', marginTop:'10px' }} variant={'outlined'}>
-            Enroll Now
+            {actionTitle}
           </Button>
         </Box>
       </Box>

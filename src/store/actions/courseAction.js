@@ -46,8 +46,19 @@ async function coursePayment(payload, thunkAPI) {
   }
 }
 
+async function getAllCoursesAdmin(payload, thunkAPI) {
+  try {
+      const response = await ApiResource.get(ApiConstants.getAllCoursesAdmin, requestHeaders(payload.token))
+
+      return response
+  } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+  }
+}
+
 export const CourseApiServices = {
   uploadCourse,
   getAllCourses,
-  coursePayment
+  coursePayment,
+  getAllCoursesAdmin
 }

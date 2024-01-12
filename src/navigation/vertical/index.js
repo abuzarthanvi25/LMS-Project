@@ -40,7 +40,7 @@ const navigation = () => {
       {
         title: 'Manage Courses',
         icon: CourseSettings,
-        path: '/dashboard/#'
+        path: '/manage-courses'
       }
     ],
     Student: [

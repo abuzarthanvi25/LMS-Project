@@ -29,7 +29,7 @@ const UserLayout = ({ children, userDetails, getAllCoursesRequest, courseList })
   const [role, setRole] = useState('')
   const [coursesLocal, setCourseLocal] = useState([])
 
-  useEffect(() => handleGetCoursesList(), [])
+  // useEffect(() => handleGetCoursesList(), [])
 
   useEffect(() => {
     if (courseList) {
@@ -42,7 +42,7 @@ const UserLayout = ({ children, userDetails, getAllCoursesRequest, courseList })
 
   const handleGetCoursesList = () => {
     try {
-      if (token) {
+      if (token && ROLE == ROLES.student) {
         getAllCoursesRequest({ token })
           .then(unwrapResult)
           .then(() => setLoading(false))
