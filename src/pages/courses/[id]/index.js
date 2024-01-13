@@ -5,22 +5,23 @@ import { Card, CardContent } from '@mui/material'
 import CourseDetailsComponent from 'src/@core/custom-components/course/course-details'
 import { get } from 'lodash'
 import { ROLES } from 'src/configs/role-constants'
+import { removeDuplicatesById } from 'src/@core/utils/helpers'
 
 const CourseDetails = ({ courseList, allCoursesAdmin, userDetails }) => {
   const router = useRouter()
   const [courseDetails, setCourseDetails] = useState(null)
-  const id = router?.query?.id;
-  const Role = get(userDetails, 'data.role', '');
+  const id = router?.query?.id
+  const Role = get(userDetails, 'data.role', '')
 
   const handleList = () => {
-    if(!Role) return courseList
+    if (!Role) return removeDuplicatesById(courseList)
 
-    if(Role == ROLES.student){
-      return courseList
+    if (Role == ROLES.student) {
+      return removeDuplicatesById(courseList)
     }
 
-    if(Role == ROLES.admin){
-      return allCoursesAdmin
+    if (Role == ROLES.admin) {
+      return removeDuplicatesById(allCoursesAdmin)
     }
   }
 
@@ -48,9 +49,9 @@ const CourseDetails = ({ courseList, allCoursesAdmin, userDetails }) => {
 
 const mapStateToProps = state => {
   return {
-    courseList: state.courses.allCourses,
+    courseList: state.courses.allCoursesStudent,
     allCoursesAdmin: state.courses.allCoursesAdmin,
-    userDetails: state.auth.userDetails,
+    userDetails: state.auth.userDetails
   }
 }
 

@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useEffect } from 'react'
 import { get } from 'lodash'
 import { ROLES } from 'src/configs/role-constants'
-import { getAllCoursesRequest } from 'src/store/reducers/courseReducer'
+import { getAllCoursesRequest, getCoursesStudentRequest } from 'src/store/reducers/courseReducer'
 import { getTeacherStatisticsRequest, getAdminStatisticsRequest } from 'src/store/reducers/dashboardReducer'
 import { bindActionCreators, unwrapResult } from '@reduxjs/toolkit'
 import { showFaliureToast } from 'src/configs/app-toast'
@@ -14,18 +14,27 @@ import PaymentForm from 'src/@core/custom-components/payment/payment-form'
 import TeacherStatistics from 'src/@core/custom-components/dashboard/teacher-statistics'
 import AdminStatistics from 'src/@core/custom-components/dashboard/admin-statistics'
 
-const Dashboard = ({ userDetails, courseList, getAllCoursesRequest, teacherStatistics, getTeacherStatisticsRequest, getAdminStatisticsRequest, adminStatistics }) => {
+const Dashboard = ({
+  userDetails,
+  courseList,
+  getAllCoursesRequest,
+  getCoursesStudentRequest,
+  teacherStatistics,
+  getTeacherStatisticsRequest,
+  getAdminStatisticsRequest,
+  adminStatistics
+}) => {
   const Role = get(userDetails, 'data.role', '')
   const token = get(userDetails, 'token', null)
 
   const [courseListLocal, setCourseListLocal] = useState([])
-  const [teacherStatisticsLocal, setTeacherStatisticsLocal] = useState(null);
-  const [adminStatisticsLocal, setAdminStatisticsLocal] = useState(null);
+  const [teacherStatisticsLocal, setTeacherStatisticsLocal] = useState(null)
+  const [adminStatisticsLocal, setAdminStatisticsLocal] = useState(null)
   const [loading, setLoading] = useState(false)
   const [courseToPayDetails, setCourseToPayDetails] = useState(null)
 
   useEffect(() => {
-    if (!!courseList.length) {
+    if (!!courseList?.length) {
       setCourseListLocal(courseList)
     }
   }, [courseList])
@@ -43,9 +52,9 @@ const Dashboard = ({ userDetails, courseList, getAllCoursesRequest, teacherStati
   }, [adminStatistics])
 
   useEffect(() => {
-    handleGetAllCourses();
-    handleGetTeacherStatistics();
-    handleGetAdminStatistics();
+    handleGetAllCourses()
+    handleGetTeacherStatistics()
+    handleGetAdminStatistics()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -53,6 +62,21 @@ const Dashboard = ({ userDetails, courseList, getAllCoursesRequest, teacherStati
     try {
       if (token && Role == ROLES.student) {
         getAllCoursesRequest({ token })
+          .then(unwrapResult)
+          .then(() => setLoading(false))
+          .catch(error => {
+            showFaliureToast(error?.response?.data?.message)
+          })
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handleGetEnrolledCourses = () => {
+    try {
+      if (token && Role == ROLES.student) {
+        getCoursesStudentRequest({ token })
           .then(unwrapResult)
           .then(() => setLoading(false))
           .catch(error => {
@@ -98,10 +122,22 @@ const Dashboard = ({ userDetails, courseList, getAllCoursesRequest, teacherStati
     setCourseToPayDetails(courseDetails)
   }
 
+  const handleGetResponseCourses = () => {
+    handleGetEnrolledCourses()
+    handleGetAllCourses()
+  }
+
   const handleRenderDashboardContent = (role = '') => {
     switch (role) {
       case ROLES.student:
-        return <CourseCardList actionTitle={'Enroll Now'} handleAction={handleEnrollStudent} courseList={courseListLocal} loading={loading} />
+        return (
+          <CourseCardList
+            actionTitle={'Enroll Now'}
+            handleAction={handleEnrollStudent}
+            courseList={courseListLocal}
+            loading={loading}
+          />
+        )
 
       case ROLES.teacher:
         return <TeacherStatistics loading={loading} statistics={teacherStatisticsLocal} />
@@ -122,7 +158,7 @@ const Dashboard = ({ userDetails, courseList, getAllCoursesRequest, teacherStati
         onClose={() => setCourseToPayDetails(null)}
       >
         <PaymentForm
-          handleGetAllCourses={handleGetAllCourses}
+          handleGetAllCourses={handleGetResponseCourses}
           onClose={() => setCourseToPayDetails(null)}
           details={courseToPayDetails}
         />
@@ -137,7 +173,7 @@ const mapStateToProps = state => {
     courseList: state.courses.allCourses,
     userDetails: state.auth.userDetails,
     teacherStatistics: state.dashboard.teacherStatistics,
-    adminStatistics: state.dashboard.adminStatistics,
+    adminStatistics: state.dashboard.adminStatistics
   }
 }
 
@@ -146,7 +182,8 @@ const mapDispatchToProps = dispatch => {
     {
       getAllCoursesRequest,
       getTeacherStatisticsRequest,
-      getAdminStatisticsRequest
+      getAdminStatisticsRequest,
+      getCoursesStudentRequest
     },
     dispatch
   )

@@ -98,8 +98,22 @@ export function handleBack(steps, setActiveStep) {
 
 export function camelCaseToTitleCase(inputString) {
   // Add a space before capital letters and then convert to title case
-  const titleCaseString = inputString.replace(/([A-Z])/g, ' $1');
+  const titleCaseString = inputString.replace(/([A-Z])/g, ' $1')
 
   // Convert the first character to uppercase and trim any leading spaces
-  return titleCaseString.charAt(0).toUpperCase() + titleCaseString.slice(1).trim();
+  return titleCaseString.charAt(0).toUpperCase() + titleCaseString.slice(1).trim()
+}
+
+export function removeDuplicatesById(objectsArray) {
+  const uniqueObjects = {}
+
+  // Iterate through the array and store unique objects based on their ids
+  objectsArray.forEach(obj => {
+    uniqueObjects[obj._id] = obj
+  })
+
+  // Convert the unique objects back to an array
+  const uniqueArray = Object.values(uniqueObjects)
+
+  return uniqueArray
 }

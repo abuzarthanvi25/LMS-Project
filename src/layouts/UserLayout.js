@@ -19,23 +19,25 @@ import { connect } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { unwrapResult } from '@reduxjs/toolkit'
 import { bindActionCreators } from 'redux'
-import { getAllCoursesRequest } from '../store/reducers/courseReducer'
+import { getCoursesStudentRequest } from '../store/reducers/courseReducer'
 import { showFaliureToast } from 'src/configs/app-toast'
 import { ROLES } from 'src/configs/role-constants'
+import { removeDuplicatesById } from 'src/@core/utils/helpers'
 
-const UserLayout = ({ children, userDetails, getAllCoursesRequest, courseList }) => {
+const UserLayout = ({ children, userDetails, getCoursesStudentRequest, allCoursesStudent }) => {
   // ** Hooks
   const { settings, saveSettings } = useSettings()
   const [role, setRole] = useState('')
   const [coursesLocal, setCourseLocal] = useState([])
 
-  // useEffect(() => handleGetCoursesList(), [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => handleGetCoursesList(), [])
 
   useEffect(() => {
-    if (courseList) {
-      setCourseLocal(courseList)
+    if (allCoursesStudent) {
+      setCourseLocal(removeDuplicatesById(allCoursesStudent))
     }
-  }, [courseList])
+  }, [allCoursesStudent])
 
   const ROLE = get(userDetails, 'data.role', 'Student')
   const token = get(userDetails, 'token', null)
@@ -43,7 +45,7 @@ const UserLayout = ({ children, userDetails, getAllCoursesRequest, courseList })
   const handleGetCoursesList = () => {
     try {
       if (token && ROLE == ROLES.student) {
-        getAllCoursesRequest({ token })
+        getCoursesStudentRequest({ token })
           .then(unwrapResult)
           .then(() => setLoading(false))
           .catch(error => {
@@ -66,7 +68,7 @@ const UserLayout = ({ children, userDetails, getAllCoursesRequest, courseList })
       const arr = [
         ...VerticalNavItems()[role],
         {
-          sectionTitle: 'Courses'
+          sectionTitle: 'Enrolled Courses'
         },
         ...coursesLocal.map(course => ({
           title: course?.courseTitle,
@@ -117,7 +119,7 @@ const mapStateToProps = state => {
   return {
     userDetails: state.auth.userDetails,
     profileDetails: state.profile.profileDetails,
-    courseList: state.courses.allCourses,
+    allCoursesStudent: state.courses.allCoursesStudent,
     rehydrated: state._persist.rehydrated
   }
 }
@@ -125,7 +127,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return bindActionCreators(
     {
-      getAllCoursesRequest
+      getCoursesStudentRequest
     },
     dispatch
   )
