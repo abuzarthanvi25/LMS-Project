@@ -10,7 +10,8 @@ const CONSTANT = {
   coursePayment: '/buyCourse',
   getTeacherStatistics: '/fetchTeacherKPI',
   getAdminStatistics: '/dashboardKPI',
-  getAllCoursesAdmin: '/getAllCourse'
+  getAllCoursesAdmin: '/getAllCourse',
+  getCoursesStudent: '/fetchCourseByStudent'
 }
 
 export default CONSTANT

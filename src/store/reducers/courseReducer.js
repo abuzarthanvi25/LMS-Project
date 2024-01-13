@@ -11,7 +11,8 @@ const initialState = {
   error: null,
   loading: loadingStates.idle,
   allCourses: [],
-  allCoursesAdmin: []
+  allCoursesAdmin: [],
+  allCoursesStudent: []
 }
 
 export const uploadCourseRequest = createAsyncThunk('CourseReducer/uploadCourseRequest', async (payload, thunkApi) => {
@@ -20,11 +21,14 @@ export const uploadCourseRequest = createAsyncThunk('CourseReducer/uploadCourseR
   return response
 })
 
-export const coursePaymentRequest = createAsyncThunk('CourseReducer/coursePaymentRequest', async (payload, thunkApi) => {
-  const response = await CourseApiServices.coursePayment(payload, thunkApi)
+export const coursePaymentRequest = createAsyncThunk(
+  'CourseReducer/coursePaymentRequest',
+  async (payload, thunkApi) => {
+    const response = await CourseApiServices.coursePayment(payload, thunkApi)
 
-  return response
-})
+    return response
+  }
+)
 
 export const getAllCoursesRequest = createAsyncThunk(
   'CourseReducer/getAllCoursesRequest',
@@ -35,11 +39,23 @@ export const getAllCoursesRequest = createAsyncThunk(
   }
 )
 
-export const getAllCoursesAdminRequest = createAsyncThunk('CourseReducer/getAdminStatisticsRequest', async (payload, thunkApi) => {
-  const response = await CourseApiServices.getAllCoursesAdmin(payload, thunkApi)
+export const getAllCoursesAdminRequest = createAsyncThunk(
+  'CourseReducer/getAdminStatisticsRequest',
+  async (payload, thunkApi) => {
+    const response = await CourseApiServices.getAllCoursesAdmin(payload, thunkApi)
 
-  return response
-})
+    return response
+  }
+)
+
+export const getCoursesStudentRequest = createAsyncThunk(
+  'CourseReducer/getCoursesStudentRequest',
+  async (payload, thunkApi) => {
+    const response = await CourseApiServices.getCoursesStudent(payload, thunkApi)
+
+    return response
+  }
+)
 
 const CourseReducer = createReducer(initialState, builder => {
   builder
@@ -74,6 +90,22 @@ const CourseReducer = createReducer(initialState, builder => {
       state.error = action.payload?.response?.data
       state.loading = loadingStates.idle
       state.allCoursesAdmin = null
+    })
+
+    //NOTE - Get Courses cases
+    .addCase(getCoursesStudentRequest.pending, state => {
+      state.error = null
+      state.loading = loadingStates.pending
+    })
+    .addCase(getCoursesStudentRequest.fulfilled, (state, action) => {
+      state.error = null
+      state.loading = loadingStates.idle
+      state.allCoursesStudent = [...action.payload.data?.data]
+    })
+    .addCase(getCoursesStudentRequest.rejected, (state, action) => {
+      state.error = action.payload?.response?.data
+      state.loading = loadingStates.idle
+      state.allCoursesStudent = null
     })
 
     //NOTE - Logout case

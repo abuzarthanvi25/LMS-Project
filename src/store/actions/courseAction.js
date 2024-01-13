@@ -48,11 +48,21 @@ async function coursePayment(payload, thunkAPI) {
 
 async function getAllCoursesAdmin(payload, thunkAPI) {
   try {
-      const response = await ApiResource.get(ApiConstants.getAllCoursesAdmin, requestHeaders(payload.token))
+    const response = await ApiResource.get(ApiConstants.getAllCoursesAdmin, requestHeaders(payload.token))
 
-      return response
+    return response
   } catch (error) {
-      return thunkAPI.rejectWithValue(error)
+    return thunkAPI.rejectWithValue(error)
+  }
+}
+
+async function getCoursesStudent(payload, thunkAPI) {
+  try {
+    const response = await ApiResource.get(ApiConstants.getCoursesStudent, requestHeaders(payload.token))
+
+    return response
+  } catch (error) {
+    return thunkAPI.rejectWithValue(error)
   }
 }
 
@@ -60,5 +70,6 @@ export const CourseApiServices = {
   uploadCourse,
   getAllCourses,
   coursePayment,
-  getAllCoursesAdmin
+  getAllCoursesAdmin,
+  getCoursesStudent
 }
