@@ -54,7 +54,7 @@ export const addCourseValidationSchema = Yup.object({
   courseDescription: Yup.string().required('Course description is required'),
   price: Yup.number('Price must be a number')
     .required('Course price is required')
-    .positive('Course price must be a positive number'),
+    .min(0, "Price must be atleast 0"),
   courseThumbnail: Yup.mixed().required('Thumbnail image is required'),
   material_1: Yup.mixed().required('At least one video per course is required')
 })
