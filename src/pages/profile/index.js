@@ -130,7 +130,7 @@ const SkeletonImg = styled(Skeleton)(({ theme }) => ({
   }
 }))
 
-const ProfileDetails = ({ profileDetails, token, getProfileDetailsRequest }) => {
+const ProfileDetails = ({ profileDetails, token, getProfileDetailsRequest, courses = [] }) => {
   // ** State
   const [imgSrc, setImgSrc] = useState('/images/avatars/3.png')
   const [loading, setLoading] = useState(false)
@@ -142,6 +142,7 @@ const ProfileDetails = ({ profileDetails, token, getProfileDetailsRequest }) => 
   const education = get(profileDetails, 'data.education', '')
   const subject = get(profileDetails, 'data.subject', '')
   const cvImage = get(profileDetails, 'data.cvImage', '')
+  const isVerified = get(profileDetails, 'data.isVerified', false)
 
   useEffect(() => {
     handleGetProfileDetails()
@@ -259,13 +260,25 @@ const ProfileDetails = ({ profileDetails, token, getProfileDetailsRequest }) => 
             </Box>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', flexWrap: 'wrap' }}>
               <Typography variant='body' sx={{ fontWeight: 'bolder' }}>
-                Suject
+                Subject
               </Typography>
               {loading ? (
                 <Skeleton animation='wave' variant='text' width={200} height={40} />
               ) : (
                 <Typography variant='body' sx={{ fontWeight: 'bolder' }}>
                   {subject ?? 'Maths'}
+                </Typography>
+              )}
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px', flexWrap: 'wrap' }}>
+              <Typography variant='body' sx={{ fontWeight: 'bolder' }}>
+                Verification Status
+              </Typography>
+              {loading ? (
+                <Skeleton animation='wave' variant='text' width={200} height={40} />
+              ) : (
+                <Typography variant='body' color={isVerified ? 'green' : 'error'} sx={{ fontWeight: 'bolder' }}>
+                  {isVerified ? 'Verified' : 'Not Verified'}
                 </Typography>
               )}
             </Box>
@@ -300,18 +313,23 @@ const ProfileDetails = ({ profileDetails, token, getProfileDetailsRequest }) => 
           </Typography>
 
           <Grid container spacing={3}>
-            <Grid item sm={12} md={role == ROLES.teacher ? 6 : 12} lg={role == ROLES.teacher ? 6 : 12}>
-              <CourseProgress loading={loading} courseName={"Database and API's Development"} progress={30} />
-            </Grid>
-            <Grid item sm={12} md={role == ROLES.teacher ? 6 : 12} lg={role == ROLES.teacher ? 6 : 12}>
-              <CourseProgress loading={loading} courseName={'Frontend Web Development'} progress={40} />
-            </Grid>
-            <Grid item sm={12} md={role == ROLES.teacher ? 6 : 12} lg={role == ROLES.teacher ? 6 : 12}>
-              <CourseProgress loading={loading} courseName={'Responsive Design'} progress={70} />
-            </Grid>
-            <Grid item sm={12} md={role == ROLES.teacher ? 6 : 12} lg={role == ROLES.teacher ? 6 : 12}>
-              <CourseProgress loading={loading} courseName={'Software Designing'} progress={100} />
-            </Grid>
+            {courses.length ? (
+              courses.slice(0, 4).map(({ courseTitle }, _) => (
+                <Grid key={_} item sm={12} md={role == ROLES.teacher ? 6 : 12} lg={role == ROLES.teacher ? 6 : 12}>
+                  <CourseProgress
+                    loading={loading}
+                    courseName={courseTitle}
+                    progress={Math.round(Math.random() * 100)}
+                  />
+                </Grid>
+              ))
+            ) : (
+              <Grid sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }} item>
+                <Typography color={'gray'} variant='body'>
+                  You are not enrolled in any courses yet
+                </Typography>
+              </Grid>
+            )}
           </Grid>
         </Grid>
       </Grid>
@@ -323,6 +341,7 @@ const mapStateToProps = state => {
   return {
     token: state.auth.userDetails?.token,
     profileDetails: state.profile.profileDetails,
+    courses: state.courses.allCoursesStudent,
     rehydrated: state._persist.rehydrated
   }
 }
