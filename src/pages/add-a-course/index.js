@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import {
+  Alert,
   Box,
   Button,
   Card,
@@ -26,9 +27,13 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { showFaliureToast, showSuccessToast } from 'src/configs/app-toast'
 import UploadLoader from '../../@core/custom-components/loaders/upload-loader'
+import CustomModal from '../../@core/custom-components/modals/custom-modal'
+import { useRouter } from 'next/router'
+import { ROLES } from 'src/configs/role-constants'
 
-const AddACourse = ({ token, uploadCourseRequest, getAllCoursesRequest }) => {
+const AddACourse = ({ token, uploadCourseRequest, getAllCoursesRequest, isVerified, role }) => {
   const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
   const [previewImageSrc, setPreviewImageSrc] = useState(null)
   const [previewVideoSrc, setPreviewVideoSrc] = useState({ file: null, videoTitle: '' })
@@ -125,6 +130,27 @@ const AddACourse = ({ token, uploadCourseRequest, getAllCoursesRequest }) => {
 
   return (
     <Card>
+      {role == ROLES.teacher ? (
+        <CustomModal open={!isVerified} heading={'Unauthorized Access'}>
+          <div style={{ padding: '10px' }}>
+            <Alert
+              style={{ width: 'max-content' }}
+              variant='filled'
+              severity='warning'
+              color='warning'
+              action={
+                <Button variant='contained' onClick={() => router.replace('/dashboard')}>
+                  Go to Dashboard
+                </Button>
+              }
+            >
+              <Typography variant='body1' color={'red'}>
+                You are not authorized for uploading a course yet{' '}
+              </Typography>
+            </Alert>
+          </div>
+        </CustomModal>
+      ) : null}
       {loading ? (
         <UploadLoader />
       ) : (
@@ -312,7 +338,9 @@ const AddACourse = ({ token, uploadCourseRequest, getAllCoursesRequest }) => {
 
 const mapStateToProps = state => {
   return {
-    token: state.auth.userDetails?.token
+    token: state.auth.userDetails?.token,
+    isVerified: state.auth.userDetails?.data?.isVerified,
+    role: state.auth.userDetails?.data?.role
   }
 }
 
