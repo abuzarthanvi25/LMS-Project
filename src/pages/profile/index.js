@@ -300,38 +300,40 @@ const ProfileDetails = ({ profileDetails, token, getProfileDetailsRequest, cours
             </Box>
           </Grid>
         ) : null}
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={role == ROLES.teacher ? 12 : 6}
-          lg={role == ROLES.teacher ? 12 : 6}
-          sx={{ padding: '0px 15px', marginTop: '60px' }}
-        >
-          <Typography variant='h5' sx={{ fontWeight: 'bolder' }}>
-            Your Courses
-          </Typography>
+        {role == ROLES.student && (
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={role == ROLES.teacher ? 12 : 6}
+            lg={role == ROLES.teacher ? 12 : 6}
+            sx={{ padding: '0px 15px', marginTop: '60px' }}
+          >
+            <Typography variant='h5' sx={{ fontWeight: 'bolder' }}>
+              Your Courses
+            </Typography>
 
-          <Grid container spacing={3}>
-            {courses.length ? (
-              courses.slice(0, 4).map(({ courseTitle }, _) => (
-                <Grid key={_} item sm={12} md={role == ROLES.teacher ? 6 : 12} lg={role == ROLES.teacher ? 6 : 12}>
-                  <CourseProgress
-                    loading={loading}
-                    courseName={courseTitle}
-                    progress={Math.round(Math.random() * 100)}
-                  />
+            <Grid container spacing={3}>
+              {courses.length ? (
+                courses.slice(0, 4).map(({ courseTitle }, _) => (
+                  <Grid key={_} item sm={12} md={role == ROLES.teacher ? 6 : 12} lg={role == ROLES.teacher ? 6 : 12}>
+                    <CourseProgress
+                      loading={loading}
+                      courseName={courseTitle}
+                      progress={Math.round(Math.random() * 100)}
+                    />
+                  </Grid>
+                ))
+              ) : (
+                <Grid sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }} item>
+                  <Typography color={'gray'} variant='body'>
+                    You are not enrolled in any courses yet
+                  </Typography>
                 </Grid>
-              ))
-            ) : (
-              <Grid sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }} item>
-                <Typography color={'gray'} variant='body'>
-                  You are not enrolled in any courses yet
-                </Typography>
-              </Grid>
-            )}
+              )}
+            </Grid>
           </Grid>
-        </Grid>
+        )}
       </Grid>
     </Card>
   )
