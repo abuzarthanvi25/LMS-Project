@@ -13,6 +13,7 @@ import CustomModal from 'src/@core/custom-components/modals/custom-modal'
 import PaymentForm from 'src/@core/custom-components/payment/payment-form'
 import TeacherStatistics from 'src/@core/custom-components/dashboard/teacher-statistics'
 import AdminStatistics from 'src/@core/custom-components/dashboard/admin-statistics'
+import PaymentSummary from 'src/@core/custom-components/payment/payment-summary'
 
 const Dashboard = ({
   userDetails,
@@ -32,6 +33,8 @@ const Dashboard = ({
   const [adminStatisticsLocal, setAdminStatisticsLocal] = useState(null)
   const [loading, setLoading] = useState(false)
   const [courseToPayDetails, setCourseToPayDetails] = useState(null)
+  const [isFreeCourse, setIsFreeCourse] = useState(false)
+  const [stepFunctions, setStepFunctions] = useState(null)
 
   useEffect(() => {
     if (!!courseList?.length) {
@@ -119,6 +122,10 @@ const Dashboard = ({
   }
 
   const handleEnrollStudent = courseDetails => {
+    const price = get(courseDetails, 'price', null)
+    if (price !== null && price === 0) {
+      setIsFreeCourse(true)
+    }
     setCourseToPayDetails(courseDetails)
   }
 
@@ -155,13 +162,30 @@ const Dashboard = ({
       <CustomModal
         heading={'Course Payment'}
         open={courseToPayDetails ? true : false}
-        onClose={() => setCourseToPayDetails(null)}
+        onClose={() => {
+          setCourseToPayDetails(null)
+          setIsFreeCourse(false)
+        }}
       >
-        <PaymentForm
-          handleGetAllCourses={handleGetResponseCourses}
-          onClose={() => setCourseToPayDetails(null)}
-          details={courseToPayDetails}
-        />
+        {isFreeCourse ? (
+          <PaymentSummary
+            onClose={() => {
+              setCourseToPayDetails(null)
+              setIsFreeCourse(false)
+            }}
+            handleGetAllCourses={handleGetResponseCourses}
+            handleNextStep={() => {}}
+            cardDetails={{}}
+            details={courseToPayDetails}
+            isFreeCourse={isFreeCourse}
+          />
+        ) : (
+          <PaymentForm
+            handleGetAllCourses={handleGetResponseCourses}
+            onClose={() => setCourseToPayDetails(null)}
+            details={courseToPayDetails}
+          />
+        )}
       </CustomModal>
       {handleRenderDashboardContent(Role)}
     </Box>

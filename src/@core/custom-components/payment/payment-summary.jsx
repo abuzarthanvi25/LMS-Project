@@ -14,7 +14,8 @@ const PaymentSummary = ({
   handleNextStep,
   onClose,
   handleGetAllCourses,
-  userDetails
+  userDetails,
+  isFreeCourse = false
 }) => {
   const [loading, setLoading] = useState(false)
 
@@ -25,17 +26,27 @@ const PaymentSummary = ({
       if (token) {
         setLoading(true)
 
-        const [MM, YYYY] = cardDetails?.expiry.split('/')
+        let coursePaymentBody
 
-        if (MM && YYYY) {
-          const coursePaymentBody = {
-            courseId: details?._id,
-            cardNumber: cardDetails?.cardNumber,
-            expMonth: MM,
-            expYear: YYYY,
-            cvc: cardDetails?.cvc
+        if (isFreeCourse) {
+          coursePaymentBody = {
+            courseId: details?._id
           }
+        } else {
+          const [MM, YYYY] = cardDetails?.expiry.split('/')
 
+          if (MM && YYYY) {
+            coursePaymentBody = {
+              courseId: details?._id,
+              cardNumber: cardDetails?.cardNumber,
+              expMonth: MM,
+              expYear: YYYY,
+              cvc: cardDetails?.cvc
+            }
+          }
+        }
+
+        if (coursePaymentBody) {
           coursePaymentRequest({ token, body: coursePaymentBody })
             .then(unwrapResult)
             .then(res => {
