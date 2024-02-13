@@ -1,10 +1,7 @@
 import { Box, Typography } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 
-const CourseBanner = ({
-  bannerDesc = 'lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem lorem ',
-  bannerTitle = 'lorem lorem lorem'
-}) => {
+const CourseBanner = ({ bannerDesc = 'This is your Course Playlist', bannerTitle = 'Your Course Playlist' }) => {
   const theme = useTheme()
 
   return (
